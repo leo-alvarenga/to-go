@@ -5,6 +5,7 @@ import (
 
 	"github.com/leo-alvarenga/to-go/api"
 	"github.com/leo-alvarenga/to-go/shared"
+	"github.com/leo-alvarenga/to-go/shared/config"
 )
 
 /*
@@ -12,7 +13,7 @@ Entrypoint to To go's CLI;
 Handles most of the decision making and interface calls
 based on the args provided by the user.
 */
-func CLIEntrypoint(args []string) bool {
+func CLIEntrypoint(args []string, cfg *config.ConfigValue) bool {
 
 	if len(args) > 1 {
 		option := args[1]
@@ -26,7 +27,7 @@ func CLIEntrypoint(args []string) bool {
 			return invalidOptionAlert(option)
 		}
 
-		api.StartupEngine()
+		api.StartupEngine(cfg)
 
 		switch option {
 

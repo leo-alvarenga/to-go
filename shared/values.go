@@ -1,8 +1,5 @@
 package shared
 
-// The name of the YAML file used for storing configs -> TODO
-const configFile string = ""
-
 const (
 	pending            string = "pending"
 	inProgress         string = "doing"
