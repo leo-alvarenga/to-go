@@ -1,9 +1,8 @@
 package cli
 
-/* The max length a line can have when being printed to stdout */
-const defaultMaxLineLen int = 59
+import "github.com/leo-alvarenga/to-go/shared/config"
 
-var maxLineLength int = defaultMaxLineLen // must be an odd number!
+var maxLineLength int = config.DefaultMaxLineLen // must be an odd number!
 var maxContentLength int = maxLineLength - 4
 
 const (

@@ -1,10 +1,7 @@
 package cli
 
 import (
-	"fmt"
-
 	"github.com/leo-alvarenga/to-go/api"
-	"github.com/leo-alvarenga/to-go/shared"
 )
 
 /*
@@ -13,6 +10,7 @@ Handles most of the decision making and interface calls
 based on the args provided by the user.
 */
 func CLIEntrypoint(args []string) bool {
+	api.LoadConfig()
 
 	if len(args) > 1 {
 		option := args[1]
@@ -37,18 +35,6 @@ func CLIEntrypoint(args []string) bool {
 			break
 		}
 	}
-
-	return helpMessage()
-}
-
-func helpMessage() bool {
-	shared.ShowLogo()
-
-	return false
-}
-
-func invalidOptionAlert(input string) bool {
-	fmt.Printf("\"%s\" is not a valid option!\n\n", input)
 
 	return helpMessage()
 }

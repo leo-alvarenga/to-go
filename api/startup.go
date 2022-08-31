@@ -1,6 +1,8 @@
 package api
 
-import "github.com/leo-alvarenga/to-go/shared"
+import (
+	"github.com/leo-alvarenga/to-go/shared"
+)
 
 /* Executes all necessary steps to spin up the engine */
 func StartupEngine() {
@@ -9,4 +11,9 @@ func StartupEngine() {
 	highPriorityTasks = new([]shared.Task)
 
 	retrieveTasks()
+}
+
+func LoadConfig() {
+	Config.New()
+	Config.LoadFromYaml(ConfigFile)
 }

@@ -42,6 +42,7 @@ func retrieveTasks() {
 		}
 
 		task = nil
+		ref = nil
 	}
 }
 
