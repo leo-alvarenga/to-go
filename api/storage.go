@@ -51,7 +51,7 @@ Returns pointers for each one of the dynamically allocated Task slices:
   - Pointer [1] -> Medium priority tasks;
   - Pointer [2] -> High priority tasks;
 */
-func getTasks() [fileCount]*[]shared.Task {
+func GetTasks() [fileCount]*[]shared.Task {
 	return [fileCount]*[]shared.Task{
 		lowPriorityTasks, mediumPriorityTasks, highPriorityTasks,
 	}
