@@ -1,11 +1,7 @@
 package cli
 
 import (
-	"fmt"
-
 	"github.com/leo-alvarenga/to-go/api"
-	"github.com/leo-alvarenga/to-go/shared"
-	"github.com/leo-alvarenga/to-go/shared/config"
 )
 
 /*
@@ -13,7 +9,8 @@ Entrypoint to To go's CLI;
 Handles most of the decision making and interface calls
 based on the args provided by the user.
 */
-func CLIEntrypoint(args []string, cfg *config.ConfigValue) bool {
+func CLIEntrypoint(args []string) bool {
+	api.LoadConfig()
 
 	if len(args) > 1 {
 		option := args[1]
@@ -27,7 +24,7 @@ func CLIEntrypoint(args []string, cfg *config.ConfigValue) bool {
 			return invalidOptionAlert(option)
 		}
 
-		api.StartupEngine(cfg)
+		api.StartupEngine()
 
 		switch option {
 
@@ -38,18 +35,6 @@ func CLIEntrypoint(args []string, cfg *config.ConfigValue) bool {
 			break
 		}
 	}
-
-	return helpMessage()
-}
-
-func helpMessage() bool {
-	shared.ShowLogo()
-
-	return false
-}
-
-func invalidOptionAlert(input string) bool {
-	fmt.Printf("\"%s\" is not a valid option!\n\n", input)
 
 	return helpMessage()
 }

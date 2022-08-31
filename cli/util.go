@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/leo-alvarenga/to-go/shared"
+	"github.com/leo-alvarenga/to-go/shared/styles"
 )
 
 /* Returns a string filled with a finite whitespace (' ') characters based on the 'count' parameter */
@@ -225,4 +226,9 @@ func isThisAnOption(s string) bool {
 	}
 
 	return false
+}
+
+func showWithStyle(s string, style *styles.TextStyle) {
+	fmt.Print(style.ANSI + s)
+	fmt.Println(style.Reset)
 }

@@ -7,20 +7,32 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type ColorScheme struct {
+	Title   string
+	Accent  string
+	Error   string
+	Warning string
+	Success string
+
+	Reset string
+}
+
 type ConfigValue struct {
 	FirstExec  bool `yaml:"firstExec"`
 	MaxLineLen int  `yaml:"maxLineLen"`
+	Colors     ColorScheme
 }
 
 func (cfg *ConfigValue) New() {
-	cfg = new(ConfigValue)
-
-	cfg.SetDefault()
-}
-
-func (cfg *ConfigValue) SetDefault() {
 	cfg.FirstExec = true
 	cfg.MaxLineLen = DefaultMaxLineLen
+
+	cfg.Colors.Accent += DefaultColors.Accent
+	cfg.Colors.Title += DefaultColors.Title
+	cfg.Colors.Error += DefaultColors.Error
+	cfg.Colors.Warning += DefaultColors.Warning
+	cfg.Colors.Success += DefaultColors.Success
+	cfg.Colors.Reset += DefaultColors.Reset
 }
 
 func (cfg *ConfigValue) LoadFromYaml(filename string) {
@@ -46,9 +58,8 @@ func (cfg *ConfigValue) LoadFromYaml(filename string) {
 
 	err = yaml.Unmarshal(file, cfg)
 
-	fmt.Println("ok")
 	if err != nil {
-		cfg.SetDefault()
+		cfg.New()
 		return
 	}
 }
