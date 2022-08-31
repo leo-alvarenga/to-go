@@ -149,11 +149,57 @@ func displayTask(task shared.Task) {
 Display all the contents of a Task, not leaving out a single character
 */
 func displayTaskVerbose(task shared.Task) {
+	separator := "-------------"
+
 	s := splitLongString(task.Id, maxContentLength)
+	s = append(s, separator)
 
 	for _, line := range s {
 		displayFormatted(line)
 	}
+
+	s = splitLongString(task.Title, maxContentLength)
+	s = append(s, separator)
+
+	for _, line := range s {
+		displayFormatted(line)
+	}
+
+	displayFormatted(task.Priority + " -> " + task.Status)
+	displayFormatted(separator)
+
+	s = splitLongString(task.Description, maxContentLength)
+	s = append(s, separator)
+
+	for _, line := range s {
+		displayFormatted(line)
+	}
+}
+
+/*
+Display header contents of a Task, such as Id, Title and priority
+*/
+func displayTaskHeader(task shared.Task) {
+	separator := " - "
+	idLen := len(task.Id)
+	out := ""
+
+	l := maxContentLength - (shared.LenLongestPriority + len(separator))
+
+	if idLen < l {
+		out += task.Id + separator
+		remaining := l - len(out)
+
+		if len(task.Title) > remaining {
+			out += task.Title[:remaining-len(separator)] + "..."
+		} else {
+			out += task.Title
+		}
+
+		out += separator + task.Priority
+	}
+
+	displayFormatted(out)
 }
 
 /*

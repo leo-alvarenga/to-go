@@ -9,12 +9,12 @@ import (
 func listOption(modifier string) bool {
 	switch modifier {
 	case verbose:
-		showTasksFull()
+		return showTasksFull()
+	case header_only:
+		return showTasksHeaders()
 	default:
-		showTasks()
+		return showTasks()
 	}
-
-	return false
 }
 
 /*
@@ -53,6 +53,21 @@ func showTasksFull() bool {
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
 			displayTaskVerbose(todo)
+		}
+		displayBorder(true)
+	}
+
+	return false
+}
+
+func showTasksHeaders() bool {
+	tasks := api.GetTasks()
+
+	displayBorder(false)
+
+	for _, taskList := range tasks {
+		for _, todo := range *taskList {
+			displayTaskHeader(todo)
 		}
 		displayBorder(true)
 	}
