@@ -3,47 +3,68 @@ package api
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/leo-alvarenga/to-go/shared"
 	"gopkg.in/yaml.v3"
 )
 
-/* Reads and retrieves tasks from each one of the task YAML files. */
-func retrieveTasks() {
-	var task *[]shared.Task
-	var ref *[]shared.Task
+func readFromFile(filename string, taskSlice *[]shared.Task, done chan bool, wg *sync.WaitGroup) {
+	defer wg.Done()
 
-	for i, file := range taskFiles {
-		f, err := os.ReadFile(file)
+	content, err := os.ReadFile(filename)
 
-		if err != nil {
-			panic(fmt.Sprintf("Missing \"%s\". Aborting...", file))
-		}
+	if err == nil {
+		task := new([]shared.Task)
+		err = yaml.Unmarshal(content, task)
 
-		task = new([]shared.Task)
-		err = yaml.Unmarshal(f, task)
-
-		if err != nil {
-			panic(fmt.Sprintf("Could not unpack \"%s\". Aborting...", file))
-		}
-
-		switch i {
-		case 1:
-			ref = &*mediumPriorityTasks
-		case 2:
-			ref = &*highPriorityTasks
-		default:
-			ref = &*lowPriorityTasks
-		}
-
-		for index, todo := range *task {
-			todo.Id = fmt.Sprintf("%s-%d", file, index)
-			*ref = append(*ref, todo)
+		if err == nil {
+			for index, todo := range *task {
+				todo.Id = fmt.Sprintf("%s-%d", filename, index)
+				*taskSlice = append(*taskSlice, todo)
+			}
+		} else {
+			fmt.Println("couldn unmarshal", filename)
 		}
 
 		task = nil
-		ref = nil
+	} else {
+		file, _ := os.OpenFile(filename, os.O_CREATE, 0644)
+
+		file.Close()
 	}
+
+	done <- true
+}
+
+/* Reads and retrieves tasks from each one of the task YAML files. */
+func retrieveTasks() {
+	var flags []chan bool
+	var ref *[]shared.Task
+	wg := new(sync.WaitGroup)
+
+	wg.Add(fileCount)
+
+	for i, file := range taskFiles {
+		flags = append(flags, make(chan bool))
+
+		switch file[:2] {
+		case "low":
+			ref = lowPriorityTasks
+		case "med":
+			ref = mediumPriorityTasks
+		default:
+			ref = highPriorityTasks
+		}
+
+		go readFromFile(file, ref, flags[i], wg)
+	}
+
+	for _, f := range flags {
+		<-f
+	}
+
+	wg.Wait()
 }
 
 /*
@@ -54,6 +75,6 @@ Returns pointers for each one of the dynamically allocated Task slices:
 */
 func GetTasks() [fileCount]*[]shared.Task {
 	return [fileCount]*[]shared.Task{
-		lowPriorityTasks, mediumPriorityTasks, highPriorityTasks,
+		highPriorityTasks, lowPriorityTasks, mediumPriorityTasks,
 	}
 }

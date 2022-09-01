@@ -7,9 +7,9 @@ import (
 
 // The name of the YAML file used for storing tasks with unassigned priority
 var taskFiles = [3]string{
-	"low_p.yaml",
-	"medium_p.yaml",
 	"high_p.yaml",
+	"medium_p.yaml",
+	"low_p.yaml",
 }
 
 const fileCount int = len(taskFiles)
