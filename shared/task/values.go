@@ -1,4 +1,4 @@
-package shared
+package task
 
 const (
 	pending            string = "pending"

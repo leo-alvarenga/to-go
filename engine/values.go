@@ -1,8 +1,8 @@
-package api
+package engine
 
 import (
-	"github.com/leo-alvarenga/to-go/shared"
 	"github.com/leo-alvarenga/to-go/shared/config"
+	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 // The name of the YAML file used for storing tasks with unassigned priority
@@ -18,6 +18,6 @@ const fileCount int = len(taskFiles)
 var ConfigFile string = "to_go.cfg.yaml"
 var Config *config.ConfigValue = new(config.ConfigValue)
 
-var lowPriorityTasks *[]shared.Task
-var mediumPriorityTasks *[]shared.Task
-var highPriorityTasks *[]shared.Task
+var lowPriorityTasks *[]task.Task
+var mediumPriorityTasks *[]task.Task
+var highPriorityTasks *[]task.Task

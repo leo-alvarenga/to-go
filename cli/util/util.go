@@ -1,10 +1,9 @@
-package cli
+package util
 
 import (
 	"fmt"
 
-	"github.com/leo-alvarenga/to-go/shared"
-	"github.com/leo-alvarenga/to-go/shared/styles"
+	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 /* Returns a string filled with a finite whitespace (' ') characters based on the 'count' parameter */
@@ -45,7 +44,7 @@ Display a crude border-like character sequence;
 The 'end' value indicates whether or not the border corresponds to
 the bottom
 */
-func displayBorder(end bool) {
+func DisplayBorder(end bool) {
 	out := ""
 	limit := ""
 
@@ -107,41 +106,41 @@ func displayFormatted(format string) {
 Displays a task in such a way as to standartize the length of each of its info, while respecting
 To go's table-like output format
 */
-func displayTask(task shared.Task) {
+func DisplayTask(t task.Task) {
 	separator := " | "
 	maxLenTitle := (maxContentLength -
-		(shared.LenLongestPriority + shared.LenLongestStatus + 9)) / 2
+		(task.LenLongestPriority + task.LenLongestStatus + 9)) / 2
 
 	maxLenDesc := maxLenTitle
 
-	if len(task.Title) > maxLenTitle {
-		task.Title = task.Title[:(maxLenTitle-3)] + "..."
-	} else if len(task.Title) < maxLenTitle {
-		task.Title +=
-			getGapFiller(maxLenTitle - len(task.Title))
+	if len(t.Title) > maxLenTitle {
+		t.Title = t.Title[:(maxLenTitle-3)] + "..."
+	} else if len(t.Title) < maxLenTitle {
+		t.Title +=
+			getGapFiller(maxLenTitle - len(t.Title))
 	}
 
-	if len(task.Description) > maxLenDesc {
-		task.Description = task.Description[:maxLenDesc-3] + "..."
-	} else if len(task.Description) < maxLenDesc {
-		task.Description +=
-			getGapFiller(maxLenDesc - len(task.Description))
+	if len(t.Description) > maxLenDesc {
+		t.Description = t.Description[:maxLenDesc-3] + "..."
+	} else if len(t.Description) < maxLenDesc {
+		t.Description +=
+			getGapFiller(maxLenDesc - len(t.Description))
 	}
 
-	if len(task.Priority) < shared.LenLongestPriority {
-		task.Priority +=
-			getGapFiller(shared.LenLongestPriority - len(task.Priority))
+	if len(t.Priority) < task.LenLongestPriority {
+		t.Priority +=
+			getGapFiller(task.LenLongestPriority - len(t.Priority))
 	}
 
-	if len(task.Status) < shared.LenLongestStatus {
-		task.Status +=
-			getGapFiller(shared.LenLongestStatus - len(task.Status))
+	if len(t.Status) < task.LenLongestStatus {
+		t.Status +=
+			getGapFiller(task.LenLongestStatus - len(t.Status))
 	}
 
-	out := task.Title +
-		separator + task.Description +
-		separator + task.Priority +
-		separator + task.Status
+	out := t.Title +
+		separator + t.Description +
+		separator + t.Priority +
+		separator + t.Status
 
 	displayFormatted(out)
 }
@@ -149,27 +148,27 @@ func displayTask(task shared.Task) {
 /*
 Display all the contents of a Task, not leaving out a single character
 */
-func displayTaskVerbose(task shared.Task) {
+func DisplayTaskVerbose(t task.Task) {
 	separator := "-------------"
 
-	s := splitLongString(task.Id, maxContentLength)
+	s := splitLongString(t.Id, maxContentLength)
 	s = append(s, separator)
 
 	for _, line := range s {
 		displayFormatted(line)
 	}
 
-	s = splitLongString(task.Title, maxContentLength)
+	s = splitLongString(t.Title, maxContentLength)
 	s = append(s, separator)
 
 	for _, line := range s {
 		displayFormatted(line)
 	}
 
-	displayFormatted(task.Priority + " -> " + task.Status)
+	displayFormatted(t.Priority + " -> " + t.Status)
 	displayFormatted(separator)
 
-	s = splitLongString(task.Description, maxContentLength)
+	s = splitLongString(t.Description, maxContentLength)
 	s = append(s, separator)
 
 	for _, line := range s {
@@ -180,45 +179,31 @@ func displayTaskVerbose(task shared.Task) {
 /*
 Display header contents of a Task, such as Id, Title and priority
 */
-func displayTaskHeader(task shared.Task) {
+func DisplayTaskHeader(t task.Task) {
 	separator := " - "
-	idLen := len(task.Id)
+	idLen := len(t.Id)
 	out := ""
 
-	l := maxContentLength - (shared.LenLongestPriority + len(separator))
+	l := maxContentLength - (task.LenLongestPriority + len(separator))
 
 	if idLen < l {
-		out += task.Id + separator
+		out += t.Id + separator
 		remaining := l - len(out)
 
-		if len(task.Title) > remaining {
-			out += task.Title[:remaining-len(separator)] + "..."
+		if len(t.Title) > remaining {
+			out += t.Title[:remaining-len(separator)] + "..."
 		} else {
-			out += task.Title
+			out += t.Title
 		}
 
-		out += separator + task.Priority
+		out += separator + t.Priority
 	}
 
 	displayFormatted(out)
 }
 
-/*
-Checks if 'mod' is a valid modifier for the 'option'
--> TODO: Prob should remove this, not being used...
-*/
-func isThisAModifierForThis(mod, option string) bool {
-	for _, m := range CLIModifiers[option] {
-		if m == mod {
-			return true
-		}
-	}
-
-	return false
-}
-
 /* Checks if 's' is a valid CLI option */
-func isThisAnOption(s string) bool {
+func IsThisAnOption(s string) bool {
 	for _, opt := range CLIOptions {
 		if opt == s {
 			return true
@@ -226,9 +211,4 @@ func isThisAnOption(s string) bool {
 	}
 
 	return false
-}
-
-func showWithStyle(s string, style *styles.TextStyle) {
-	fmt.Print(style.ANSI + s)
-	fmt.Println(style.Reset)
 }

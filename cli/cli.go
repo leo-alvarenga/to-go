@@ -1,7 +1,9 @@
 package cli
 
 import (
-	"github.com/leo-alvarenga/to-go/api"
+	"github.com/leo-alvarenga/to-go/cli/options"
+	"github.com/leo-alvarenga/to-go/cli/util"
+	"github.com/leo-alvarenga/to-go/engine"
 )
 
 /*
@@ -10,7 +12,7 @@ Handles most of the decision making and interface calls
 based on the args provided by the user.
 */
 func CLIEntrypoint(args []string) bool {
-	api.LoadConfig()
+	engine.LoadConfig()
 
 	if len(args) > 1 {
 		option := args[1]
@@ -20,21 +22,21 @@ func CLIEntrypoint(args []string) bool {
 			modifier = args[2]
 		}
 
-		if !isThisAnOption(option) {
-			return invalidOptionAlert(option)
+		if !util.IsThisAnOption(option) {
+			return options.InvalidOptionAlert(option)
 		}
 
-		api.StartupEngine()
+		engine.StartupEngine()
 
 		switch option {
 
-		case list:
-			return listOption(modifier)
+		case util.List:
+			return options.ListOption(modifier)
 
 		default:
 			break
 		}
 	}
 
-	return helpMessage()
+	return options.HelpMessage()
 }

@@ -1,4 +1,4 @@
-package shared
+package task
 
 func IsThisAStatus(s string) bool {
 	for _, status := range ValidStatuses {

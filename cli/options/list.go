@@ -1,16 +1,17 @@
-package cli
+package options
 
 import (
-	"github.com/leo-alvarenga/to-go/api"
-	"github.com/leo-alvarenga/to-go/shared"
+	"github.com/leo-alvarenga/to-go/cli/util"
+	"github.com/leo-alvarenga/to-go/engine"
+	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 /* Handles the interface calls for To go's 'list' option */
-func listOption(modifier string) bool {
+func ListOption(modifier string) bool {
 	switch modifier {
-	case verbose:
+	case util.CLIModifiers["verbose"]:
 		return showTasksFull()
-	case header_only:
+	case util.CLIModifiers["header_only"]:
 		return showTasksHeaders()
 	default:
 		return showTasks()
@@ -22,54 +23,55 @@ Displays all tasks in such a way as to standartize the length of each of its inf
 in a table-like output format
 */
 func showTasks() bool {
-	tasks := api.GetTasks()
+	tasks := engine.GetTasks()
 
-	displayBorder(false)
+	util.DisplayBorder(false)
 
-	displayTask(shared.Task{
+	util.DisplayTask(task.Task{
 		Title:       "Title",
 		Description: "Description",
 		Priority:    "P...",
 		Status:      "Status",
 	})
 
-	displayBorder(true)
+	util.DisplayBorder(true)
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
-			displayTask(todo)
+			util.DisplayTask(todo)
 		}
 	}
 
-	displayBorder(true)
+	util.DisplayBorder(true)
 
 	return false
 }
 
 func showTasksFull() bool {
-	tasks := api.GetTasks()
+	tasks := engine.GetTasks()
 
-	displayBorder(false)
+	util.DisplayBorder(false)
 
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
-			displayTaskVerbose(todo)
+			util.DisplayTaskVerbose(todo)
 		}
-		displayBorder(true)
+
+		util.DisplayBorder(true)
 	}
 
 	return false
 }
 
 func showTasksHeaders() bool {
-	tasks := api.GetTasks()
+	tasks := engine.GetTasks()
 
-	displayBorder(false)
+	util.DisplayBorder(false)
 
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
-			displayTaskHeader(todo)
+			util.DisplayTaskHeader(todo)
 		}
-		displayBorder(true)
+		util.DisplayBorder(true)
 	}
 
 	return false

@@ -1,14 +1,14 @@
-package api
+package engine
 
 import (
-	"github.com/leo-alvarenga/to-go/shared"
+	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 /* Executes all necessary steps to spin up the engine */
 func StartupEngine() {
-	lowPriorityTasks = new([]shared.Task)
-	mediumPriorityTasks = new([]shared.Task)
-	highPriorityTasks = new([]shared.Task)
+	lowPriorityTasks = new([]task.Task)
+	mediumPriorityTasks = new([]task.Task)
+	highPriorityTasks = new([]task.Task)
 
 	retrieveTasks()
 }

@@ -1,21 +1,21 @@
-package api
+package engine
 
 import (
 	"fmt"
 	"os"
 	"sync"
 
-	"github.com/leo-alvarenga/to-go/shared"
+	"github.com/leo-alvarenga/to-go/shared/task"
 	"gopkg.in/yaml.v3"
 )
 
-func readFromFile(filename string, taskSlice *[]shared.Task, done chan bool, wg *sync.WaitGroup) {
+func readFromFile(filename string, taskSlice *[]task.Task, done chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	content, err := os.ReadFile(filename)
 
 	if err == nil {
-		task := new([]shared.Task)
+		task := new([]task.Task)
 		err = yaml.Unmarshal(content, task)
 
 		if err == nil {
@@ -40,7 +40,7 @@ func readFromFile(filename string, taskSlice *[]shared.Task, done chan bool, wg 
 /* Reads and retrieves tasks from each one of the task YAML files. */
 func retrieveTasks() {
 	var flags []chan bool
-	var ref *[]shared.Task
+	var ref *[]task.Task
 	wg := new(sync.WaitGroup)
 
 	wg.Add(fileCount)
@@ -73,8 +73,8 @@ Returns pointers for each one of the dynamically allocated Task slices:
   - Pointer [1] -> Medium priority tasks;
   - Pointer [2] -> High priority tasks;
 */
-func GetTasks() [fileCount]*[]shared.Task {
-	return [fileCount]*[]shared.Task{
+func GetTasks() [fileCount]*[]task.Task {
+	return [fileCount]*[]task.Task{
 		highPriorityTasks, lowPriorityTasks, mediumPriorityTasks,
 	}
 }
