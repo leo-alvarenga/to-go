@@ -9,7 +9,7 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func readFromFile(filename string, taskSlice *[]task.Task, done chan bool, wg *sync.WaitGroup) {
+func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool, wg *sync.WaitGroup) {
 	defer wg.Done()
 
 	content, err := os.ReadFile(filename)
@@ -45,7 +45,7 @@ func retrieveTasks() {
 
 	wg.Add(fileCount)
 
-	for i, file := range taskFiles {
+	for i, file := range taskFilenames {
 		flags = append(flags, make(chan bool))
 
 		switch file[:2] {
@@ -57,7 +57,7 @@ func retrieveTasks() {
 			ref = highPriorityTasks
 		}
 
-		go readFromFile(file, ref, flags[i], wg)
+		go readFromYamlFile(file, ref, flags[i], wg)
 	}
 
 	for _, f := range flags {

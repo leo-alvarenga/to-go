@@ -10,9 +10,9 @@ import (
 func ListOption(modifier string) bool {
 	switch modifier {
 	case util.CLIModifiers["verbose"]:
-		return showTasksFull()
+		return showTasksVerbose()
 	case util.CLIModifiers["header_only"]:
-		return showTasksHeaders()
+		return showTasksHeaderOnly()
 	default:
 		return showTasks()
 	}
@@ -46,7 +46,7 @@ func showTasks() bool {
 	return false
 }
 
-func showTasksFull() bool {
+func showTasksVerbose() bool {
 	tasks := engine.GetTasks()
 
 	util.DisplayBorder(false)
@@ -62,14 +62,14 @@ func showTasksFull() bool {
 	return false
 }
 
-func showTasksHeaders() bool {
+func showTasksHeaderOnly() bool {
 	tasks := engine.GetTasks()
 
 	util.DisplayBorder(false)
 
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
-			util.DisplayTaskHeader(todo)
+			util.DisplayTaskHeaderOnly(todo)
 		}
 		util.DisplayBorder(true)
 	}

@@ -11,7 +11,7 @@ Entrypoint to To go's CLI;
 Handles most of the decision making and interface calls
 based on the args provided by the user.
 */
-func CLIEntrypoint(args []string) bool {
+func Entrypoint(args []string) bool {
 	engine.LoadConfig()
 
 	if len(args) > 1 {
@@ -26,7 +26,7 @@ func CLIEntrypoint(args []string) bool {
 			return options.InvalidOptionAlert(option)
 		}
 
-		engine.StartupEngine()
+		engine.Startup()
 
 		switch option {
 

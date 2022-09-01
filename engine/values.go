@@ -6,13 +6,13 @@ import (
 )
 
 // The name of the YAML file used for storing tasks with unassigned priority
-var taskFiles = [3]string{
+var taskFilenames = [3]string{
 	"high_p.yaml",
 	"medium_p.yaml",
 	"low_p.yaml",
 }
 
-const fileCount int = len(taskFiles)
+const fileCount int = len(taskFilenames)
 
 // The name of the YAML file used for storing configs -> TODO
 var ConfigFile string = "to_go.cfg.yaml"

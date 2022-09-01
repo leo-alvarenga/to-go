@@ -5,7 +5,7 @@ import (
 )
 
 /* Executes all necessary steps to spin up the engine */
-func StartupEngine() {
+func Startup() {
 	lowPriorityTasks = new([]task.Task)
 	mediumPriorityTasks = new([]task.Task)
 	highPriorityTasks = new([]task.Task)

@@ -179,7 +179,7 @@ func DisplayTaskVerbose(t task.Task) {
 /*
 Display header contents of a Task, such as Id, Title and priority
 */
-func DisplayTaskHeader(t task.Task) {
+func DisplayTaskHeaderOnly(t task.Task) {
 	separator := " - "
 	idLen := len(t.Id)
 	out := ""

@@ -11,7 +11,7 @@ import (
 func HelpMessage() bool {
 	colors := engine.Config.Colors
 
-	style := new(styles.TextStyle)
+	style := new(styles.OutputStyle)
 	style.New(colors.Success, "", []string{"bold"})
 
 	logo.ShowLogo(style)
