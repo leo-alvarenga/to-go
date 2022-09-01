@@ -1,4 +1,4 @@
-package shared
+package task
 
 type Task struct {
 	Id          string

@@ -1,6 +1,6 @@
 package styles
 
-type TextStyle struct {
+type OutputStyle struct {
 	Text       string
 	Background string
 	Format     []string
@@ -8,7 +8,7 @@ type TextStyle struct {
 	ANSI       string
 }
 
-func (t *TextStyle) New(txt, background string, styles []string) {
+func (t *OutputStyle) New(txt, background string, styles []string) {
 
 	t.Text += txt
 	t.Background = background

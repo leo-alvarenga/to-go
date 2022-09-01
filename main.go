@@ -7,5 +7,5 @@ import (
 )
 
 func main() {
-	cli.CLIEntrypoint(os.Args)
+	cli.Entrypoint(os.Args)
 }

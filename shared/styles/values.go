@@ -1,5 +1,6 @@
 package styles
 
+/* Values used for ANSI escape sequence generation */
 var ansiColors = map[string]string{
 	"black":   "0",
 	"red":     "1",

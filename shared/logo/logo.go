@@ -1,4 +1,4 @@
-package cli
+package logo
 
 import "github.com/leo-alvarenga/to-go/shared/styles"
 
@@ -11,9 +11,8 @@ var Logo = [6]string{
 	"  \\_/\\___/ \\__,_|\\___/    \\_/_|  \\__,_|\\___|_|\\_\\___|_|",
 }
 
-func showLogo(style *styles.TextStyle) {
-
+func ShowLogo(style *styles.OutputStyle) {
 	for _, line := range Logo {
-		showWithStyle(line, style)
+		styles.ShowWithStyle(line, style)
 	}
 }

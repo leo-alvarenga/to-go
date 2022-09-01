@@ -1,7 +1,7 @@
-package shared
+package task
 
 func IsThisAStatus(s string) bool {
-	for _, status := range ValidStatuses {
+	for _, status := range Statuses {
 		if status == s {
 			return true
 		}
@@ -11,7 +11,7 @@ func IsThisAStatus(s string) bool {
 }
 
 func IsThisAPriority(s string) bool {
-	for _, p := range ValidPriorities {
+	for _, p := range Priorities {
 		if p == s {
 			return true
 		}

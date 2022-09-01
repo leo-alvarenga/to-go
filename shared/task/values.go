@@ -1,4 +1,4 @@
-package shared
+package task
 
 const (
 	pending            string = "pending"
@@ -11,13 +11,13 @@ const (
 	LenLongestPriority int    = len(medium)
 )
 
-var ValidStatuses map[string]string = map[string]string{
+var Statuses map[string]string = map[string]string{
 	pending:    pending,
 	inProgress: inProgress,
 	done:       done,
 }
 
-var ValidPriorities map[string]string = map[string]string{
+var Priorities map[string]string = map[string]string{
 	low:    low,
 	medium: medium,
 	high:   high,

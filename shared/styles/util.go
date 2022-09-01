@@ -1,5 +1,7 @@
 package styles
 
+import "fmt"
+
 func generateANSISequence(txt, bg string, style []string) (string, string) {
 
 	t, b, s := "", "", ""
@@ -33,4 +35,9 @@ func generateANSISequence(txt, bg string, style []string) (string, string) {
 	}
 
 	return ansiColors["escape"] + t + b + s + ansiColors["end"], "\033[0m"
+}
+
+func ShowWithStyle(s string, style *OutputStyle) {
+	fmt.Print(style.ANSI + s)
+	fmt.Println(style.Reset)
 }
