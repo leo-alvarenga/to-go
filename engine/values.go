@@ -12,6 +12,12 @@ var taskFilenames = [3]string{
 	"low_p.yaml",
 }
 
+var TaskFilenamesMapped = map[string]string{
+	"high":   taskFilenames[0],
+	"medium": taskFilenames[1],
+	"low":    taskFilenames[2],
+}
+
 const fileCount int = len(taskFilenames)
 
 // The name of the YAML file used for storing configs -> TODO
