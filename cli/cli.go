@@ -33,6 +33,9 @@ func Entrypoint(args []string) bool {
 		case util.List:
 			return options.ListOption(modifier)
 
+		case util.Add:
+			return options.AddOption()
+
 		default:
 			break
 		}
