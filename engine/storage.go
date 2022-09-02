@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"sync"
 
@@ -65,6 +66,18 @@ func retrieveTasks() {
 	}
 
 	wg.Wait()
+}
+
+func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
+	content, err := yaml.Marshal(taskSlice)
+
+	if err == nil {
+		os.WriteFile(filename, content, 0666)
+	} else {
+		log.Fatal(err)
+	}
+
+	return err
 }
 
 /*

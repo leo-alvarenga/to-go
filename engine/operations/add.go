@@ -27,14 +27,22 @@ func Add(t task.Task) error {
 func addTask(ref *[]task.Task, t task.Task) error {
 	for _, item := range *ref {
 		if item.Title == t.Title {
+
 			return errors.New(fmt.Sprintf("Task \"%s\" already exists", t.Title))
 		}
 	}
 
-	id := (*ref)[len(*ref)-1].Id
+	id := ""
+
+	if len(*ref) > 0 {
+		pos := len(*ref) - 1
+		id = (*ref)[pos].Id
+	} else {
+		id = engine.TaskFilenamesMapped[t.Priority] + "-0"
+	}
 
 	t.Id = id[:len(id)-1] + string(rune(len(*ref)))
 	*ref = append(*ref, t)
 
-	return nil
+	return engine.WriteToYamlFile(engine.TaskFilenamesMapped[t.Priority], ref)
 }
