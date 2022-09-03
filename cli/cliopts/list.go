@@ -1,14 +1,14 @@
-package options
+package cliopts
 
 import (
-	"github.com/leo-alvarenga/to-go/cli/util"
-	"github.com/leo-alvarenga/to-go/engine"
+	"github.com/leo-alvarenga/to-go/cli/clihelper"
+	"github.com/leo-alvarenga/to-go/ng"
 )
 
 /* Handles the interface calls for To go's 'list' option */
 func ListOption(modifier string) bool {
 	switch modifier {
-	case util.CLIModifiers["verbose"]:
+	case clihelper.CLIModifiers["verbose"]:
 		return showTasksVerbose()
 	default:
 		return showTasks()
@@ -20,34 +20,34 @@ Displays all tasks in such a way as to standartize the length of each of its inf
 in a table-like output format
 */
 func showTasks() bool {
-	tasks := engine.GetTasks()
+	tasks := ng.GetTasks()
 
 	for _, t := range *tasks["high"] {
-		util.DisplayTask(t)
+		clihelper.DisplayTask(t)
 	}
 
 	for _, t := range *tasks["medium"] {
-		util.DisplayTask(t)
+		clihelper.DisplayTask(t)
 	}
 
 	for _, t := range *tasks["low"] {
-		util.DisplayTask(t)
+		clihelper.DisplayTask(t)
 	}
 
 	return false
 }
 
 func showTasksVerbose() bool {
-	tasks := engine.GetTasks()
+	tasks := ng.GetTasks()
 
-	util.DisplayBorder(false)
+	clihelper.DisplayBorder(false)
 
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
-			util.DisplayTaskVerbose(todo)
+			clihelper.DisplayTaskVerbose(todo)
 		}
 
-		util.DisplayBorder(true)
+		clihelper.DisplayBorder(true)
 	}
 
 	return false

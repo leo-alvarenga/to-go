@@ -1,7 +1,7 @@
-package engine
+package ng
 
 import (
-	"github.com/leo-alvarenga/to-go/shared/config"
+	"github.com/leo-alvarenga/to-go/shared/cfg"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
@@ -22,7 +22,7 @@ const fileCount int = len(taskFilenames)
 
 // The name of the YAML file used for storing configs -> TODO
 var ConfigFile string = "to_go.cfg.yaml"
-var Config *config.ConfigValue = new(config.ConfigValue)
+var Config *cfg.ConfigValue = new(cfg.ConfigValue)
 
 var lowPriorityTasks *[]task.Task
 var mediumPriorityTasks *[]task.Task

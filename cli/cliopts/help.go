@@ -1,20 +1,20 @@
-package options
+package cliopts
 
 import (
 	"fmt"
 
-	"github.com/leo-alvarenga/to-go/engine"
-	"github.com/leo-alvarenga/to-go/shared/logo"
+	"github.com/leo-alvarenga/to-go/cli/clihelper"
+	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/shared/styles"
 )
 
 func HelpMessage() bool {
-	colors := engine.Config.Colors
+	colors := ng.Config.Colors
 
 	style := new(styles.OutputStyle)
 	style.New(colors.Success, "", []string{"bold"})
 
-	logo.ShowLogo(style)
+	clihelper.ShowLogo(style)
 
 	return false
 }

@@ -1,15 +1,15 @@
-package operations
+package ngops
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/leo-alvarenga/to-go/engine"
+	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 func Add(t task.Task) error {
-	pointers := engine.GetTasks()
+	pointers := ng.GetTasks()
 
 	ref := pointers[t.Priority]
 
@@ -30,11 +30,11 @@ func addTask(ref *[]task.Task, t task.Task) error {
 		pos := len(*ref) - 1
 		id = (*ref)[pos].Id
 	} else {
-		id = engine.TaskFilenamesMapped[t.Priority] + "--"
+		id = ng.TaskFilenamesMapped[t.Priority] + "--"
 	}
 
 	t.Id = id[:len(id)-1] + string(rune(len(*ref)))
 	*ref = append(*ref, t)
 
-	return engine.WriteToYamlFile(engine.TaskFilenamesMapped[t.Priority], ref)
+	return ng.WriteToYamlFile(ng.TaskFilenamesMapped[t.Priority], ref)
 }

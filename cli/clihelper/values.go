@@ -1,8 +1,8 @@
-package util
+package clihelper
 
-import "github.com/leo-alvarenga/to-go/shared/config"
+import "github.com/leo-alvarenga/to-go/shared/cfg"
 
-var maxLineLength int = config.DefaultMaxLineLen // must be an odd number!
+var maxLineLength int = cfg.DefaultMaxLineLen // must be an odd number!
 var maxContentLength int = maxLineLength - 4
 
 const (

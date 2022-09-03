@@ -41,3 +41,13 @@ func ShowWithStyle(s string, style *OutputStyle) {
 	fmt.Print(style.ANSI + s)
 	fmt.Println(style.Reset)
 }
+
+func ShowAsError(title, msg string) {
+	s1, s2 := new(OutputStyle), new(OutputStyle)
+
+	s1.New("red", "black", []string{"bold", "underline"})
+	s2.New("red", "black", []string{"bold"})
+
+	ShowWithStyle(title, s1)
+	ShowWithStyle(msg, s2)
+}

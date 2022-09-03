@@ -1,4 +1,4 @@
-package config
+package cfg
 
 /* The max length a line can have when being printed to stdout */
 const DefaultMaxLineLen int = 59
