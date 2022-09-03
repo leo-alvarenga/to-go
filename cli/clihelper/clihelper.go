@@ -1,9 +1,9 @@
-package util
+package clihelper
 
 import (
 	"fmt"
 
-	"github.com/leo-alvarenga/to-go/engine"
+	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/shared/styles"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
@@ -70,7 +70,7 @@ Displays a task in a styled manner
 */
 func DisplayTask(t task.Task) {
 	style := new(styles.OutputStyle)
-	colors := engine.Config.Colors
+	colors := ng.Config.Colors
 	out := ""
 
 	style.New(colors.Accent, "", []string{"bold"})

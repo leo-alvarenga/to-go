@@ -1,18 +1,15 @@
-package engine
+package ng
 
 import (
+	"errors"
 	"fmt"
-	"log"
 	"os"
-	"sync"
 
 	"github.com/leo-alvarenga/to-go/shared/task"
 	"gopkg.in/yaml.v3"
 )
 
-func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool, wg *sync.WaitGroup) {
-	defer wg.Done()
-
+func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 	content, err := os.ReadFile(filename)
 
 	if err == nil {
@@ -25,7 +22,8 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool, w
 				*taskSlice = append(*taskSlice, todo)
 			}
 		} else {
-			fmt.Println("couldn unmarshal", filename)
+			done <- false
+			return
 		}
 
 		task = nil
@@ -39,33 +37,32 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool, w
 }
 
 /* Reads and retrieves tasks from each one of the task YAML files. */
-func retrieveTasks() {
-	var flags []chan bool
-	var ref *[]task.Task
-	wg := new(sync.WaitGroup)
+func retrieveTasks() error {
 
-	wg.Add(fileCount)
+	low, med, high := make(chan bool, 1), make(chan bool, 1), make(chan bool, 1)
 
-	for i, file := range taskFilenames {
-		flags = append(flags, make(chan bool))
-
-		switch file[:2] {
+	for _, file := range taskFilenames {
+		switch file[:3] {
 		case "low":
-			ref = lowPriorityTasks
+			go readFromYamlFile(file, lowPriorityTasks, low)
 		case "med":
-			ref = mediumPriorityTasks
+			go readFromYamlFile(file, mediumPriorityTasks, med)
 		default:
-			ref = highPriorityTasks
+			go readFromYamlFile(file, highPriorityTasks, high)
 		}
-
-		go readFromYamlFile(file, ref, flags[i], wg)
 	}
 
-	for _, f := range flags {
-		<-f
+	ok := (<-high && <-med && <-low)
+
+	if !ok {
+		return errors.New(
+			"One or more files could not be unmarshaled," +
+				"meaning they were found and read" +
+				"but couldn't be interpreted.",
+		)
 	}
 
-	wg.Wait()
+	return nil
 }
 
 func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
@@ -73,8 +70,6 @@ func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
 
 	if err == nil {
 		os.WriteFile(filename, content, 0666)
-	} else {
-		log.Fatal(err)
 	}
 
 	return err

@@ -1,19 +1,19 @@
-package engine
+package ng
 
 import (
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
-/* Executes all necessary steps to spin up the engine */
-func Startup() {
+/* Executes all necessary steps to spin up the ng */
+func Startup() error {
 	lowPriorityTasks = new([]task.Task)
 	mediumPriorityTasks = new([]task.Task)
 	highPriorityTasks = new([]task.Task)
 
-	retrieveTasks()
+	return retrieveTasks()
 }
 
-func LoadConfig() {
+func LoadConfig() error {
 	Config.New()
-	Config.LoadFromYaml(ConfigFile)
+	return Config.LoadFromYaml(ConfigFile)
 }

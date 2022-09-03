@@ -1,7 +1,7 @@
-package config
+package cfg
 
 import (
-	"fmt"
+	"errors"
 	"os"
 
 	"gopkg.in/yaml.v3"
@@ -35,31 +35,34 @@ func (cfg *ConfigValue) New() {
 	cfg.Colors.Reset += DefaultColors.Reset
 }
 
-func (cfg *ConfigValue) LoadFromYaml(filename string) {
+func (cfg *ConfigValue) LoadFromYaml(filename string) error {
 	file, err := os.ReadFile(filename)
 
 	if err != nil {
 		file, err = yaml.Marshal(cfg)
 
+		if err != nil {
+			return errors.New("Could not save config.")
+		}
+
 		f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 		if err != nil {
-			fmt.Println("open")
+			return errors.New("Could not save config.")
 		}
 
 		_, err = f.Write(file)
 		if err != nil {
-			fmt.Println("w")
+			return errors.New("Could not save config.")
 		}
 
 		f.Close()
-
-		return
 	}
 
 	err = yaml.Unmarshal(file, cfg)
 
 	if err != nil {
 		cfg.New()
-		return
 	}
+
+	return nil
 }

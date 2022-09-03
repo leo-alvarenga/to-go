@@ -1,15 +1,24 @@
-package options
+package cliopts
 
 import (
 	"github.com/AlecAivazis/survey/v2"
-	"github.com/leo-alvarenga/to-go/engine/operations"
+	"github.com/leo-alvarenga/to-go/ng/ngops"
+	"github.com/leo-alvarenga/to-go/shared/styles"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 func AddOption() bool {
-	err := operations.Add(readInput())
+	err := ngops.Add(readInput())
 
-	return err != nil
+	if err != nil {
+		styles.ShowAsError(
+			"Unable to add task",
+			"There's another task with same title or"+
+				"it was not possible to save the task.",
+		)
+	}
+
+	return false
 }
 
 func readInput() (t task.Task) {

@@ -1,8 +1,8 @@
-package logo
+package clihelper
 
 import "github.com/leo-alvarenga/to-go/shared/styles"
 
-var Logo = [6]string{
+var logo = [6]string{
 	" _____         _         _____              _",
 	"|_   _|       | |       |_   _|            | |",
 	"  | | ___   __| | ___     | |_ __ __ _  ___| | _____ _ __",
@@ -12,7 +12,7 @@ var Logo = [6]string{
 }
 
 func ShowLogo(style *styles.OutputStyle) {
-	for _, line := range Logo {
+	for _, line := range logo {
 		styles.ShowWithStyle(line, style)
 	}
 }
