@@ -81,13 +81,12 @@ func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
 }
 
 /*
-Returns pointers for each one of the dynamically allocated Task slices:
-  - Pointer [0] -> Low priority tasks;
-  - Pointer [1] -> Medium priority tasks;
-  - Pointer [2] -> High priority tasks;
+Returns pointers for each one of the dynamically allocated Task slices
 */
-func GetTasks() [fileCount]*[]task.Task {
-	return [fileCount]*[]task.Task{
-		highPriorityTasks, lowPriorityTasks, mediumPriorityTasks,
+func GetTasks() map[string]*[]task.Task {
+	return map[string]*[]task.Task{
+		"high":   highPriorityTasks,
+		"medium": mediumPriorityTasks,
+		"low":    lowPriorityTasks,
 	}
 }

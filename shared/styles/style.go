@@ -16,3 +16,7 @@ func (t *OutputStyle) New(txt, background string, styles []string) {
 
 	t.ANSI, t.Reset = generateANSISequence(txt, background, styles)
 }
+
+func (t *OutputStyle) Style(s string) string {
+	return t.ANSI + s + t.Reset
+}

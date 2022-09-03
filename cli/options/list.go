@@ -3,7 +3,6 @@ package options
 import (
 	"github.com/leo-alvarenga/to-go/cli/util"
 	"github.com/leo-alvarenga/to-go/engine"
-	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 /* Handles the interface calls for To go's 'list' option */
@@ -11,8 +10,6 @@ func ListOption(modifier string) bool {
 	switch modifier {
 	case util.CLIModifiers["verbose"]:
 		return showTasksVerbose()
-	case util.CLIModifiers["header_only"]:
-		return showTasksHeaderOnly()
 	default:
 		return showTasks()
 	}
@@ -25,23 +22,17 @@ in a table-like output format
 func showTasks() bool {
 	tasks := engine.GetTasks()
 
-	util.DisplayBorder(false)
-
-	util.DisplayTask(task.Task{
-		Title:       "Title",
-		Description: "Description",
-		Priority:    "P...",
-		Status:      "Status",
-	})
-
-	util.DisplayBorder(true)
-	for _, taskList := range tasks {
-		for _, todo := range *taskList {
-			util.DisplayTask(todo)
-		}
+	for _, t := range *tasks["high"] {
+		util.DisplayTask(t)
 	}
 
-	util.DisplayBorder(true)
+	for _, t := range *tasks["medium"] {
+		util.DisplayTask(t)
+	}
+
+	for _, t := range *tasks["low"] {
+		util.DisplayTask(t)
+	}
 
 	return false
 }
@@ -56,21 +47,6 @@ func showTasksVerbose() bool {
 			util.DisplayTaskVerbose(todo)
 		}
 
-		util.DisplayBorder(true)
-	}
-
-	return false
-}
-
-func showTasksHeaderOnly() bool {
-	tasks := engine.GetTasks()
-
-	util.DisplayBorder(false)
-
-	for _, taskList := range tasks {
-		for _, todo := range *taskList {
-			util.DisplayTaskHeaderOnly(todo)
-		}
 		util.DisplayBorder(true)
 	}
 
