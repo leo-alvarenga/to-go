@@ -9,17 +9,9 @@ import (
 )
 
 func Add(t task.Task) error {
-	var ref *[]task.Task
 	pointers := engine.GetTasks()
 
-	switch t.Priority {
-	case task.Priorities["high"]:
-		ref = pointers[2]
-	case task.Priorities["medium"]:
-		ref = pointers[1]
-	default:
-		ref = pointers[0]
-	}
+	ref := pointers[t.Priority]
 
 	return addTask(ref, t)
 }
@@ -38,7 +30,7 @@ func addTask(ref *[]task.Task, t task.Task) error {
 		pos := len(*ref) - 1
 		id = (*ref)[pos].Id
 	} else {
-		id = engine.TaskFilenamesMapped[t.Priority] + "-0"
+		id = engine.TaskFilenamesMapped[t.Priority] + "--"
 	}
 
 	t.Id = id[:len(id)-1] + string(rune(len(*ref)))

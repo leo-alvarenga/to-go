@@ -3,6 +3,8 @@ package util
 import (
 	"fmt"
 
+	"github.com/leo-alvarenga/to-go/engine"
+	"github.com/leo-alvarenga/to-go/shared/styles"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
@@ -64,142 +66,29 @@ func DisplayBorder(end bool) {
 }
 
 /*
-Display an input string in such a way as to force said string to not disrespect the
-To go's table-like output format
-*/
-func displayFormatted(format string) {
-	var fill string
-
-	var f []string
-	l := len(format)
-
-	if l >= maxContentLength {
-
-		var count int
-
-		for i := 0; i < l; i += maxContentLength {
-			count = i + maxContentLength
-			if count >= l {
-				count = count - (count - l)
-			}
-
-			f = append(f, format[i:count])
-		}
-	} else {
-		f = append(f, format)
-	}
-
-	for _, line := range f {
-		fill = ""
-
-		if len(line) < maxContentLength {
-			for i := 0; i < (maxContentLength - len(line)); i++ {
-				fill += " "
-			}
-		}
-
-		fmt.Println("| " + line + fill + " |")
-	}
-}
-
-/*
-Displays a task in such a way as to standartize the length of each of its info, while respecting
-To go's table-like output format
+Displays a task in a styled manner
 */
 func DisplayTask(t task.Task) {
-	separator := " | "
-	maxLenTitle := (maxContentLength -
-		(task.LenLongestPriority + task.LenLongestStatus + 9)) / 2
+	style := new(styles.OutputStyle)
+	colors := engine.Config.Colors
+	out := ""
 
-	maxLenDesc := maxLenTitle
+	style.New(colors.Accent, "", []string{"bold"})
+	out += style.Style(" > ")
 
-	if len(t.Title) > maxLenTitle {
-		t.Title = t.Title[:(maxLenTitle-3)] + "..."
-	} else if len(t.Title) < maxLenTitle {
-		t.Title +=
-			getGapFiller(maxLenTitle - len(t.Title))
-	}
+	out += "[" + t.GetPriorityCharacterStyled() + "] "
+	out += "[" + t.GetStatusCharacterStyled() + "] "
 
-	if len(t.Description) > maxLenDesc {
-		t.Description = t.Description[:maxLenDesc-3] + "..."
-	} else if len(t.Description) < maxLenDesc {
-		t.Description +=
-			getGapFiller(maxLenDesc - len(t.Description))
-	}
+	out += t.Title
 
-	if len(t.Priority) < task.LenLongestPriority {
-		t.Priority +=
-			getGapFiller(task.LenLongestPriority - len(t.Priority))
-	}
-
-	if len(t.Status) < task.LenLongestStatus {
-		t.Status +=
-			getGapFiller(task.LenLongestStatus - len(t.Status))
-	}
-
-	out := t.Title +
-		separator + t.Description +
-		separator + t.Priority +
-		separator + t.Status
-
-	displayFormatted(out)
+	fmt.Println(out)
 }
 
 /*
 Display all the contents of a Task, not leaving out a single character
 */
 func DisplayTaskVerbose(t task.Task) {
-	separator := "-------------"
-
-	s := splitLongString(t.Id, maxContentLength)
-	s = append(s, separator)
-
-	for _, line := range s {
-		displayFormatted(line)
-	}
-
-	s = splitLongString(t.Title, maxContentLength)
-	s = append(s, separator)
-
-	for _, line := range s {
-		displayFormatted(line)
-	}
-
-	displayFormatted(t.Priority + " -> " + t.Status)
-	displayFormatted(separator)
-
-	s = splitLongString(t.Description, maxContentLength)
-	s = append(s, separator)
-
-	for _, line := range s {
-		displayFormatted(line)
-	}
-}
-
-/*
-Display header contents of a Task, such as Id, Title and priority
-*/
-func DisplayTaskHeaderOnly(t task.Task) {
-	separator := " - "
-	idLen := len(t.Id)
-	out := ""
-
-	l := maxContentLength - (task.LenLongestPriority + len(separator))
-
-	if idLen < l {
-		out += t.Id + separator
-		remaining := l - len(out)
-
-		if len(t.Title) > remaining {
-			out += t.Title[:remaining-len(separator)] + "..."
-		} else {
-			out += t.Title
-		}
-
-		out += separator + t.Priority
-	}
-
-	displayFormatted(out)
+	fmt.Println("Not implemented yet :(")
 }
 
 /* Checks if 's' is a valid CLI option */

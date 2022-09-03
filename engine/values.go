@@ -13,9 +13,9 @@ var taskFilenames = [3]string{
 }
 
 var TaskFilenamesMapped = map[string]string{
-	"high":   taskFilenames[0],
-	"medium": taskFilenames[1],
-	"low":    taskFilenames[2],
+	"high":   "high_p.yaml",
+	"medium": "medium_p.yaml",
+	"low":    "low_p.yaml",
 }
 
 const fileCount int = len(taskFilenames)
