@@ -1,6 +1,7 @@
 package ng
 
 import (
+	"github.com/leo-alvarenga/to-go/ng/storage"
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
@@ -10,7 +11,12 @@ func Startup() error {
 	mediumPriorityTasks = new([]task.Task)
 	highPriorityTasks = new([]task.Task)
 
-	return retrieveTasks()
+	if Config.Storage == "sqlite" {
+		storage.CreateDB()
+		return nil
+	}
+
+	return retrieveTasksFromYaml()
 }
 
 func LoadConfig() error {

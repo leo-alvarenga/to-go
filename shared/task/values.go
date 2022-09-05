@@ -2,7 +2,7 @@ package task
 
 const (
 	pending            string = "pending"
-	inProgress         string = "doing"
+	doing              string = "doing"
 	done               string = "done"
 	low                string = "low"
 	medium             string = "medium"
@@ -12,9 +12,9 @@ const (
 )
 
 var Statuses map[string]string = map[string]string{
-	pending:    pending,
-	inProgress: inProgress,
-	done:       done,
+	pending: pending,
+	doing:   doing,
+	done:    done,
 }
 
 var Priorities map[string]string = map[string]string{

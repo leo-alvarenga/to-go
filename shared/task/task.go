@@ -1,6 +1,9 @@
 package task
 
-import "github.com/leo-alvarenga/to-go/shared/styles"
+import (
+	"github.com/leo-alvarenga/to-go/shared/cfg"
+	"github.com/leo-alvarenga/to-go/shared/styles"
+)
 
 type Task struct {
 	Id          string
@@ -8,6 +11,8 @@ type Task struct {
 	Description string
 	Priority    string
 	Status      string
+	CreatedIn   string
+	FinishedIn  string
 }
 
 /*
@@ -18,38 +23,45 @@ type Task struct {
  - dueTo (default=unset)
 */
 
-func (t Task) GetStatusCharacterStyled() string {
+func (t Task) GetStatusCharacterStyled(c cfg.StatusColor, useUnicode bool) string {
 	style := new(styles.OutputStyle)
-	chr := ""
+	chr := []string{}
 
 	switch t.Status {
 	case done:
-		style.New("green", "", []string{"bold"})
-		chr = "☑"
+		style.New(c.Done, "", []string{"bold"})
+		chr = append(chr, "☑")
+		chr = append(chr, "v")
 	case pending:
-		style.New("yellow", "", []string{"bold"})
-		chr = "?"
+		style.New(c.Pending, "", []string{"bold"})
+		chr = append(chr, "?")
+		chr = append(chr, " ")
 	default:
-		style.New("blue", "", []string{"bold"})
-		chr = "☐"
+		style.New(c.Doing, "", []string{"bold"})
+		chr = append(chr, "☐")
+		chr = append(chr, ".")
 	}
 
-	return style.ANSI + chr + style.Reset
+	if useUnicode {
+		return style.Style(chr[0])
+	}
+
+	return style.Style(chr[1])
 }
 
-func (t Task) GetPriorityCharacterStyled() string {
+func (t Task) GetPriorityCharacterStyled(c cfg.PriorityColor) string {
 	style := new(styles.OutputStyle)
 	chr := ""
 
 	switch t.Priority {
 	case high:
-		style.New("red", "", []string{"bold"})
+		style.New(c.High, "", []string{"bold"})
 		chr = "^"
 	case medium:
-		style.New("yellow", "", []string{"bold"})
+		style.New(c.Medium, "", []string{"bold"})
 		chr = "-"
 	default:
-		style.New("green", "", []string{"bold"})
+		style.New(c.Low, "", []string{"bold"})
 		chr = "v"
 	}
 
