@@ -15,10 +15,10 @@ func Add(t task.Task) error {
 
 	ref := pointers[t.Priority]
 
-	return addTask(ref, t)
+	return addTask(ref, t, ng.Config.UseSQLite())
 }
 
-func addTask(ref *[]task.Task, t task.Task) error {
+func addTask(ref *[]task.Task, t task.Task, useSQLite bool) error {
 	y, m, d := time.Now().Date()
 	extra := ""
 
@@ -34,27 +34,19 @@ func addTask(ref *[]task.Task, t task.Task) error {
 	}
 
 	t.Status = task.Statuses["pending"]
-	t.CreatedIn = fmt.Sprintf("%s %d%s %d", m.String(), d, extra, y)
+	t.CreatedIn = fmt.Sprintf("%s %d%s, %d", m.String(), d, extra, y)
 	t.FinishedIn = ""
 
 	for _, item := range *ref {
 		if item.Title == t.Title {
-
 			return errors.New(fmt.Sprintf("Task \"%s\" already exists", t.Title))
 		}
 	}
 
-	id := ""
-
-	if len(*ref) > 0 {
-		pos := len(*ref) - 1
-		id = (*ref)[pos].Id
-	} else {
-		id = ng.TaskFilenamesMapped[t.Priority] + "--"
+	if useSQLite {
+		return storage.WriteToSQLite(t)
 	}
 
-	t.Id = fmt.Sprintf("%s%d", id[:len(id)-1], len(*ref))
 	*ref = append(*ref, t)
-
 	return storage.WriteToYamlFile(ng.TaskFilenamesMapped[t.Priority], ref)
 }

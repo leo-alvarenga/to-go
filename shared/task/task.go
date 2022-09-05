@@ -6,7 +6,6 @@ import (
 )
 
 type Task struct {
-	Id          string
 	Title       string
 	Description string
 	Priority    string

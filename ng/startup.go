@@ -5,6 +5,17 @@ import (
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
+/*
+Returns pointers for each one of the dynamically allocated Task slices
+*/
+func GetTasks() map[string]*[]task.Task {
+	return map[string]*[]task.Task{
+		"high":   highPriorityTasks,
+		"medium": mediumPriorityTasks,
+		"low":    lowPriorityTasks,
+	}
+}
+
 /* Executes all necessary steps to spin up the ng */
 func Startup() error {
 	lowPriorityTasks = new([]task.Task)
@@ -12,11 +23,19 @@ func Startup() error {
 	highPriorityTasks = new([]task.Task)
 
 	if Config.Storage == "sqlite" {
-		storage.CreateDB()
-		return nil
+		return storage.RetriveTasksFromSQLite(
+			highPriorityTasks,
+			mediumPriorityTasks,
+			lowPriorityTasks,
+		)
 	}
 
-	return retrieveTasksFromYaml()
+	return storage.RetrieveTasksFromYaml(
+		taskFilenames,
+		highPriorityTasks,
+		mediumPriorityTasks,
+		lowPriorityTasks,
+	)
 }
 
 func LoadConfig() error {

@@ -13,8 +13,8 @@ func AddOption() bool {
 	if err != nil {
 		styles.ShowAsError(
 			"Unable to add task",
-			"There's another task with same title or"+
-				"it was not possible to save the task.",
+			"There's another task with same title or "+
+				"it was not possible to save the task."+err.Error(),
 		)
 	}
 

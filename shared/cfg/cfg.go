@@ -91,3 +91,7 @@ func (cfg *ConfigValue) LoadFromYaml(filename string) error {
 
 	return nil
 }
+
+func (c *ConfigValue) UseSQLite() bool {
+	return c.Storage == "sqlite"
+}
