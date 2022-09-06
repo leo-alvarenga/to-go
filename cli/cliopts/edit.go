@@ -38,6 +38,7 @@ func getEditInfo() (n, old task.Task) {
 	index, priority := getTaskIndex(choice)
 	tasks := ng.GetTasks()[priority]
 	old = (*tasks)[index]
+	n = old
 
 	p, s := getAllPriorities(), getAllStatuses()
 	t := old.Title

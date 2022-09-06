@@ -2,7 +2,6 @@ package ngops
 
 import (
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/leo-alvarenga/to-go/ng"
@@ -10,7 +9,7 @@ import (
 	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
-func Edit(old, n task.Task) error {
+func Edit(n, old task.Task) error {
 	if n.Status == task.Statuses["done"] {
 		n.FinishedIn = getDateInToGosFmt(time.Now().Date())
 	}
@@ -22,7 +21,6 @@ func Edit(old, n task.Task) error {
 	tasks := ng.GetTasks()[old.Priority]
 	index := -1
 	for i, item := range *tasks {
-		fmt.Println(item.Title, old.Title)
 		if item.Title == old.Title {
 			index = i
 			break
@@ -37,15 +35,19 @@ func Edit(old, n task.Task) error {
 		}
 	} else {
 		if index >= 0 {
-			t1, t2 := (*tasks)[:index-1], (*tasks)[index+1:]
-			tasks = new([]task.Task)
+			if len(*tasks) > 1 {
+				tasks = new([]task.Task)
+				t1, t2 := (*tasks)[:index-1], (*tasks)[index+1:]
 
-			for _, item := range t1 {
-				*tasks = append(*tasks, item)
-			}
+				for _, item := range t1 {
+					*tasks = append(*tasks, item)
+				}
 
-			for _, item := range t2 {
-				*tasks = append(*tasks, item)
+				for _, item := range t2 {
+					*tasks = append(*tasks, item)
+				}
+			} else {
+				tasks = new([]task.Task)
 			}
 
 			storage.WriteToYamlFile(ng.TaskFilenamesMapped[old.Priority], tasks)
