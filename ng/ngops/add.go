@@ -19,22 +19,8 @@ func Add(t task.Task) error {
 }
 
 func addTask(ref *[]task.Task, t task.Task, useSQLite bool) error {
-	y, m, d := time.Now().Date()
-	extra := ""
-
-	switch d % 10 {
-	case 1:
-		extra += "st"
-	case 2:
-		extra += "nd"
-	case 3:
-		extra += "rd"
-	default:
-		extra += "th"
-	}
-
 	t.Status = task.Statuses["pending"]
-	t.CreatedIn = fmt.Sprintf("%s %d%s, %d", m.String(), d, extra, y)
+	t.CreatedIn = getDateInToGosFmt(time.Now().Date())
 	t.FinishedIn = ""
 
 	for _, item := range *ref {
@@ -47,6 +33,7 @@ func addTask(ref *[]task.Task, t task.Task, useSQLite bool) error {
 		return storage.WriteToSQLite(t)
 	}
 
+	t.Id = len(*ref)
 	*ref = append(*ref, t)
 	return storage.WriteToYamlFile(ng.TaskFilenamesMapped[t.Priority], ref)
 }

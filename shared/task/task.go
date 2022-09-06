@@ -6,6 +6,7 @@ import (
 )
 
 type Task struct {
+	Id          int
 	Title       string
 	Description string
 	Priority    string
@@ -13,14 +14,6 @@ type Task struct {
 	CreatedIn   string
 	FinishedIn  string
 }
-
-/*
- - title (required)
- - createdIn (autoset)
- - description (default="...")
- - priority (default=low)
- - dueTo (default=unset)
-*/
 
 func (t Task) GetStatusCharacterStyled(c cfg.StatusColor, useUnicode bool) string {
 	style := new(styles.OutputStyle)

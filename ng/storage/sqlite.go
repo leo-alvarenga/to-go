@@ -52,10 +52,9 @@ func readFromDB(db *sql.DB, taskSlice *[]task.Task, priority string, done chan b
 	}
 
 	var t task.Task
-	var id int
 	for rows.Next() {
 		rows.Scan(
-			&id,
+			&t.Id,
 			&t.Title,
 			&t.Description,
 			&t.Priority,
@@ -121,6 +120,74 @@ func WriteToSQLite(t task.Task) error {
 	if err != nil {
 		return errors.New("Unable to finish insertion. Please, try again.")
 	}
+
+	return nil
+}
+
+func UpdateOnSQLite(t task.Task) error {
+	db := ConnectDB()
+
+	if db == nil {
+		return errors.New("Unable to connect to the database. Please, try again.")
+	}
+
+	s, err := db.Prepare(
+		`UPDATE tasks SET status=?, finishedIn=? WHERE id=?`)
+
+	if err != nil {
+		return errors.New("Unable to update task status.")
+	}
+
+	s.Exec(
+		t.Status,
+		t.FinishedIn,
+		t.Id,
+	)
+
+	return nil
+}
+
+func EditOnSQLite(t task.Task) error {
+	db := ConnectDB()
+
+	if db == nil {
+		return errors.New("Unable to connect to the database. Please, try again.")
+	}
+
+	s, err := db.Prepare(
+		`UPDATE tasks SET title=?, description=?, priority=?, status=?, createdIn=?, finishedIn=? WHERE id=?`)
+
+	if err != nil {
+		return errors.New("Unable to edit task. One or more edited values mad the operation not possible.")
+	}
+
+	s.Exec(
+		t.Title,
+		t.Description,
+		t.Priority,
+		t.Status,
+		t.CreatedIn,
+		t.FinishedIn,
+		t.Id,
+	)
+
+	return nil
+}
+
+func RemoveFromSQLite(t task.Task) error {
+	db := ConnectDB()
+
+	if db == nil {
+		return errors.New("Unable to connect to the database. Please, try again.")
+	}
+
+	s, err := db.Prepare(`DELETE FROM tasks WHERE id=?`)
+
+	if err != nil {
+		return errors.New("Unable to remove task.")
+	}
+
+	s.Exec(t.Id)
 
 	return nil
 }

@@ -32,14 +32,16 @@ type ColorScheme struct {
 }
 
 type ConfigValue struct {
-	UseUnicode bool        `yaml:"useUnicode"`
-	Storage    string      `yaml:"storage"`
-	Colors     ColorScheme `yaml:"colors"`
+	UseUnicode     bool        `yaml:"useUnicode"`
+	Storage        string      `yaml:"storage"`
+	TasksOlderThan int         `yaml:"tasksOlderThan"`
+	Colors         ColorScheme `yaml:"colors"`
 }
 
 func (cfg *ConfigValue) New() {
 	cfg.UseUnicode = true
 	cfg.Storage = "sqlite"
+	cfg.TasksOlderThan = 10
 	cfg.Colors = ColorScheme{
 		Priority: PriorityColor{
 			High:   "red",

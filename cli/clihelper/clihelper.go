@@ -54,10 +54,10 @@ func DisplayTask(t task.Task) {
 	out += "[" + t.GetPriorityCharacterStyled(c.Colors.Priority) + "] "
 	out += "[" + t.GetStatusCharacterStyled(c.Colors.Status, c.UseUnicode) + "] "
 
-	out += style.Style(t.Title) + "\t\t(" + t.CreatedIn + " -"
+	out += style.Style(t.Title) + "\t\t(" + t.CreatedIn + " - "
 
 	if t.FinishedIn == "" {
-		out += " [...]"
+		out += "[...]"
 	} else {
 		out += t.FinishedIn
 	}

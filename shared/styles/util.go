@@ -1,6 +1,10 @@
 package styles
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/leo-alvarenga/to-go/shared/cfg"
+)
 
 func generateANSISequence(txt, bg string, style []string) (string, string) {
 
@@ -42,11 +46,11 @@ func ShowWithStyle(s string, style *OutputStyle) {
 	fmt.Println(style.Reset)
 }
 
-func ShowAsError(title, msg string) {
+func ShowAsError(color cfg.ColorScheme, title, msg string) {
 	s1, s2 := new(OutputStyle), new(OutputStyle)
 
-	s1.New("red", "black", []string{"bold", "underline"})
-	s2.New("red", "black", []string{"bold"})
+	s1.New(color.Error, "black", []string{"bold", "underline"})
+	s2.New(color.Error, "black", []string{"bold"})
 
 	ShowWithStyle(title, s1)
 	ShowWithStyle(msg, s2)
