@@ -41,45 +41,28 @@ func splitLongString(in string, maxLen int) (out []string) {
 }
 
 /*
-Display a crude border-like character sequence;
-
-The 'end' value indicates whether or not the border corresponds to
-the bottom
-*/
-func DisplayBorder(end bool) {
-	out := ""
-	limit := ""
-
-	if end {
-		limit = "|"
-	} else {
-		limit = " "
-	}
-
-	out += limit
-	for i := 1; i < maxLineLength-1; i++ {
-		out += "_"
-	}
-
-	out += limit
-	fmt.Println(out)
-}
-
-/*
 Displays a task in a styled manner
 */
 func DisplayTask(t task.Task) {
 	style := new(styles.OutputStyle)
-	colors := ng.Config.Colors
+	c := ng.Config
 	out := ""
 
-	style.New(colors.Accent, "", []string{"bold"})
+	style.New(c.Colors.Attention, "", []string{"bold"})
 	out += style.Style(" > ")
 
-	out += "[" + t.GetPriorityCharacterStyled() + "] "
-	out += "[" + t.GetStatusCharacterStyled() + "] "
+	out += "[" + t.GetPriorityCharacterStyled(c.Colors.Priority) + "] "
+	out += "[" + t.GetStatusCharacterStyled(c.Colors.Status, c.UseUnicode) + "] "
 
-	out += t.Title
+	out += style.Style(t.Title) + "\t\t(" + t.CreatedIn + " - "
+
+	if t.FinishedIn == "" {
+		out += "[...]"
+	} else {
+		out += t.FinishedIn
+	}
+
+	out += ")"
 
 	fmt.Println(out)
 }

@@ -40,14 +40,10 @@ func showTasks() bool {
 func showTasksVerbose() bool {
 	tasks := ng.GetTasks()
 
-	clihelper.DisplayBorder(false)
-
 	for _, taskList := range tasks {
 		for _, todo := range *taskList {
 			clihelper.DisplayTaskVerbose(todo)
 		}
-
-		clihelper.DisplayBorder(true)
 	}
 
 	return false

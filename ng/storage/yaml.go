@@ -1,8 +1,7 @@
-package ng
+package storage
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/leo-alvarenga/to-go/shared/task"
@@ -17,8 +16,7 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 		err = yaml.Unmarshal(content, task)
 
 		if err == nil {
-			for index, todo := range *task {
-				todo.Id = fmt.Sprintf("%s-%d", filename, index)
+			for _, todo := range *task {
 				*taskSlice = append(*taskSlice, todo)
 			}
 		} else {
@@ -36,19 +34,29 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 	done <- true
 }
 
+func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
+	content, err := yaml.Marshal(taskSlice)
+
+	if err == nil {
+		os.WriteFile(filename, content, 0666)
+	}
+
+	return err
+}
+
 /* Reads and retrieves tasks from each one of the task YAML files. */
-func retrieveTasks() error {
+func RetrieveTasksFromYaml(taskFilenames [3]string, h, m, l *[]task.Task) error {
 
 	low, med, high := make(chan bool, 1), make(chan bool, 1), make(chan bool, 1)
 
 	for _, file := range taskFilenames {
 		switch file[:3] {
 		case "low":
-			go readFromYamlFile(file, lowPriorityTasks, low)
+			go readFromYamlFile(file, l, low)
 		case "med":
-			go readFromYamlFile(file, mediumPriorityTasks, med)
+			go readFromYamlFile(file, m, med)
 		default:
-			go readFromYamlFile(file, highPriorityTasks, high)
+			go readFromYamlFile(file, h, high)
 		}
 	}
 
@@ -63,25 +71,4 @@ func retrieveTasks() error {
 	}
 
 	return nil
-}
-
-func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
-	content, err := yaml.Marshal(taskSlice)
-
-	if err == nil {
-		os.WriteFile(filename, content, 0666)
-	}
-
-	return err
-}
-
-/*
-Returns pointers for each one of the dynamically allocated Task slices
-*/
-func GetTasks() map[string]*[]task.Task {
-	return map[string]*[]task.Task{
-		"high":   highPriorityTasks,
-		"medium": mediumPriorityTasks,
-		"low":    lowPriorityTasks,
-	}
 }

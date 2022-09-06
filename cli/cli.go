@@ -20,6 +20,7 @@ func Entrypoint(args []string) bool {
 
 	if err != nil {
 		styles.ShowAsError(
+			ng.Config.Colors,
 			"An error has occurred",
 			err.Error(),
 		)
@@ -27,6 +28,7 @@ func Entrypoint(args []string) bool {
 
 	if !term.IsTerminal(int(syscall.Stdin)) {
 		styles.ShowAsError(
+			ng.Config.Colors,
 			"It seems you are not in interactive mode",
 			"To use To go, you need to be use your terminal/prompt in interactive mode",
 		)
@@ -47,10 +49,7 @@ func Entrypoint(args []string) bool {
 		err = ng.Startup()
 
 		if err != nil {
-			styles.ShowAsError(
-				"An error has occurred",
-				err.Error(),
-			)
+			styles.ShowAsError(ng.Config.Colors, "An error has occurred", err.Error())
 
 			return true
 		}
@@ -61,6 +60,15 @@ func Entrypoint(args []string) bool {
 
 		case clihelper.Add:
 			return cliopts.AddOption()
+
+		case clihelper.Edit:
+			return cliopts.EditOption()
+
+		case clihelper.Update:
+			return cliopts.UpdateOption()
+
+		case clihelper.Remove:
+			return cliopts.RemoveOption()
 
 		default:
 			break

@@ -7,32 +7,59 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-type ColorScheme struct {
-	Title   string
-	Accent  string
-	Error   string
-	Warning string
-	Success string
+const colorReset string = "\033[0m"
 
-	Reset string
+type PriorityColor struct {
+	High   string `yaml:"high"`
+	Medium string `yaml:"medium"`
+	Low    string `yaml:"low"`
+}
+
+type StatusColor struct {
+	Pending string `yaml:"pending"`
+	Doing   string `yaml:"doing"`
+	Done    string `yaml:"done"`
+}
+
+type ColorScheme struct {
+	Priority  PriorityColor `yaml:"priority"`
+	Status    StatusColor   `yaml:"status"`
+	Attention string        `yaml:"attention"`
+	Success   string        `yaml:"success"`
+	Warning   string        `yaml:"warning"`
+	Error     string        `yaml:"error"`
+	Reset     string        `yaml:"reset"`
 }
 
 type ConfigValue struct {
-	FirstExec  bool `yaml:"firstExec"`
-	MaxLineLen int  `yaml:"maxLineLen"`
-	Colors     ColorScheme
+	UseUnicode     bool        `yaml:"useUnicode"`
+	Storage        string      `yaml:"storage"`
+	TasksOlderThan int         `yaml:"tasksOlderThan"`
+	Colors         ColorScheme `yaml:"colors"`
 }
 
 func (cfg *ConfigValue) New() {
-	cfg.FirstExec = true
-	cfg.MaxLineLen = DefaultMaxLineLen
+	cfg.UseUnicode = true
+	cfg.Storage = "sqlite"
+	cfg.TasksOlderThan = 10
+	cfg.Colors = ColorScheme{
+		Priority: PriorityColor{
+			High:   "red",
+			Medium: "yellow",
+			Low:    "green",
+		},
 
-	cfg.Colors.Accent += DefaultColors.Accent
-	cfg.Colors.Title += DefaultColors.Title
-	cfg.Colors.Error += DefaultColors.Error
-	cfg.Colors.Warning += DefaultColors.Warning
-	cfg.Colors.Success += DefaultColors.Success
-	cfg.Colors.Reset += DefaultColors.Reset
+		Status: StatusColor{
+			Pending: "yellow",
+			Doing:   "blue",
+			Done:    "green",
+		},
+		Attention: "purple",
+		Success:   "green",
+		Warning:   "yellow",
+		Error:     "red",
+		Reset:     colorReset,
+	}
 }
 
 func (cfg *ConfigValue) LoadFromYaml(filename string) error {
@@ -65,4 +92,8 @@ func (cfg *ConfigValue) LoadFromYaml(filename string) error {
 	}
 
 	return nil
+}
+
+func (c *ConfigValue) UseSQLite() bool {
+	return c.Storage == "sqlite"
 }
