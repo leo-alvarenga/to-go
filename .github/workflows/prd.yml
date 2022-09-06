@@ -18,18 +18,16 @@ jobs:
       - name: Test
         run: go test -v ./...
 
-      - name: Get To go's version
-        run: | 
-          echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-          echo $GITHUB_ENV
-
       - name: Publish
         uses: wangyoucao577/go-release-action@v1.30
         with:
-          github_token: ${{ secrets._GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: linux
           goarch: amd64
           goversion: "1.19"
+          project_path: "./cmd/bin"
+          binary_name: "latest"
+          ldflags: "-s -w"
           compress_assets: false
-          binary_name: "${{ GITHUB_ENV }}"
+          extra_files: LICENSE Readme.md
 

@@ -21,10 +21,13 @@ jobs:
       - name: Publish
         uses: wangyoucao577/go-release-action@v1.30
         with:
-          github_token: ${{ secrets._GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           goos: linux
           goarch: amd64
           goversion: "1.19"
-          compress_assets: false
+          project_path: "./cmd/bin"
           binary_name: "latest-dev"
+          ldflags: "-s -w"
+          compress_assets: false
+          extra_files: LICENSE Readme.md
 
