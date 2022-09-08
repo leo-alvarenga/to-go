@@ -20,8 +20,8 @@ func generateANSISequence(txt, bg string, style []string) (string, string) {
 		}
 	}
 
-	for key := range ansiColors {
-		for _, st := range style {
+	for _, st := range style {
+		for key := range ansiColors {
 			if st == key {
 				s += ansiColors[key] + ansiColors["separator"]
 			}
