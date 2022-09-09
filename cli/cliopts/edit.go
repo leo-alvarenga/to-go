@@ -9,11 +9,14 @@ import (
 )
 
 func EditOption() bool {
+	ListOption("")
 	err := ngops.Edit(getEditInfo())
 
 	if err != nil {
 		styles.ShowAsError(ng.Config.Colors, "Unable to edit task", err.Error())
 	}
+
+	ListOption("")
 
 	return false
 }
@@ -21,17 +24,14 @@ func EditOption() bool {
 func getEditInfo() (n, old task.Task) {
 	var choice string
 
-	titles := getAllTitles()
+	titles := ng.TaskList.GetAllTitles()
 	if len(titles) <= 0 {
-		st := new(styles.OutputStyle)
+		styles.ShowAsError(
+			ng.Config.Colors,
+			"Hold up, cowboy!",
+			"There are no tasks! Add one first if you want to edit them!",
+		)
 
-		st.New("red", "", []string{"bold", "underline"})
-		st.ShowWithStyle("Hold up, cowboy!")
-
-		st.New("red", "", []string{"bold"})
-		st.ShowWithStyle("There are no tasks! Add one first if you want to edit them!")
-
-		st = nil
 		return
 	}
 
@@ -48,9 +48,13 @@ func getEditInfo() (n, old task.Task) {
 
 	survey.Ask(q1, &choice)
 
-	index, priority := getTaskIndex(choice)
-	tasks := ng.GetTasks()[priority]
-	old = (*tasks)[index]
+	tmp, err := ng.TaskList.GetTaskByTitle(choice)
+	if err != nil {
+		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
+		return
+	}
+
+	old = *tmp
 	n = old
 
 	p, s := getAllPriorities(), getAllStatuses()

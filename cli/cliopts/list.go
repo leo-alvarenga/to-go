@@ -20,17 +20,7 @@ Displays all tasks in such a way as to standartize the length of each of its inf
 in a table-like output format
 */
 func showTasks() bool {
-	tasks := ng.GetTasks()
-
-	for _, t := range *tasks["high"] {
-		clihelper.DisplayTask(t)
-	}
-
-	for _, t := range *tasks["medium"] {
-		clihelper.DisplayTask(t)
-	}
-
-	for _, t := range *tasks["low"] {
+	for _, t := range ng.TaskList.GetAllTasks() {
 		clihelper.DisplayTask(t)
 	}
 
@@ -38,12 +28,8 @@ func showTasks() bool {
 }
 
 func showTasksVerbose() bool {
-	tasks := ng.GetTasks()
-
-	for _, taskList := range tasks {
-		for _, todo := range *taskList {
-			clihelper.DisplayTaskVerbose(todo)
-		}
+	for _, todo := range ng.TaskList.GetAllTasks() {
+		clihelper.DisplayTaskVerbose(todo)
 	}
 
 	return false

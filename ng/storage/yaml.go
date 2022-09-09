@@ -12,11 +12,11 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 	content, err := os.ReadFile(filename)
 
 	if err == nil {
-		task := new([]task.Task)
-		err = yaml.Unmarshal(content, task)
+		tasks := new([]task.Task)
+		err = yaml.Unmarshal(content, tasks)
 
 		if err == nil {
-			for _, todo := range *task {
+			for _, todo := range *tasks {
 				*taskSlice = append(*taskSlice, todo)
 			}
 		} else {
@@ -24,7 +24,7 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 			return
 		}
 
-		task = nil
+		tasks = nil
 	} else {
 		file, _ := os.OpenFile(filename, os.O_CREATE, 0644)
 
@@ -34,29 +34,29 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 	done <- true
 }
 
-func WriteToYamlFile(filename string, taskSlice *[]task.Task) error {
+func WriteToYamlFile(filename string, taskSlice *[]task.Task, done chan error) {
 	content, err := yaml.Marshal(taskSlice)
 
 	if err == nil {
 		os.WriteFile(filename, content, 0666)
 	}
 
-	return err
+	done <- err
 }
 
 /* Reads and retrieves tasks from each one of the task YAML files. */
-func RetrieveTasksFromYaml(taskFilenames [3]string, h, m, l *[]task.Task) error {
+func RetrieveTasksFromYaml(taskFilenames [3]string, list *task.TaskList) error {
 
 	low, med, high := make(chan bool, 1), make(chan bool, 1), make(chan bool, 1)
 
 	for _, file := range taskFilenames {
 		switch file[:3] {
 		case "low":
-			go readFromYamlFile(file, l, low)
+			go readFromYamlFile(file, list.Low, low)
 		case "med":
-			go readFromYamlFile(file, m, med)
+			go readFromYamlFile(file, list.Medium, med)
 		default:
-			go readFromYamlFile(file, h, high)
+			go readFromYamlFile(file, list.High, high)
 		}
 	}
 

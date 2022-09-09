@@ -5,7 +5,6 @@ import (
 	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/ng/ngops"
 	"github.com/leo-alvarenga/to-go/shared/styles"
-	"github.com/leo-alvarenga/to-go/shared/task"
 )
 
 func RemoveOption() bool {
@@ -18,21 +17,18 @@ func RemoveOption() bool {
 	return false
 }
 
-func getRemovalInfo() (t task.Task) {
+func getRemovalInfo() string {
 	var choice string
 
-	titles := getAllTitles()
+	titles := ng.TaskList.GetAllTitles()
 	if len(titles) <= 0 {
-		st := new(styles.OutputStyle)
+		styles.ShowAsError(
+			ng.Config.Colors,
+			"Hold up, cowboy!",
+			"There are no tasks! Add one first if you want to remove one!",
+		)
 
-		st.New("red", "", []string{"bold", "underline"})
-		st.ShowWithStyle("Hold up, cowboy!")
-
-		st.New("red", "", []string{"bold"})
-		st.ShowWithStyle("There are no tasks! Add one first if you want to remove one!")
-
-		st = nil
-		return
+		return ""
 	}
 
 	q1 := []*survey.Question{
@@ -47,9 +43,12 @@ func getRemovalInfo() (t task.Task) {
 	}
 
 	survey.Ask(q1, &choice)
-	index, priority := getTaskIndex(choice)
-	tasks := ng.GetTasks()[priority]
 
-	t = (*tasks)[index]
-	return
+	tmp, err := ng.TaskList.GetTaskByTitle(choice)
+	if err != nil {
+		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
+		return ""
+	}
+
+	return tmp.Title
 }

@@ -21,8 +21,7 @@ func UpdateOption() bool {
 func getUpdateInfo() (t task.Task) {
 	var choice string
 
-	titles := getAllTitles()
-
+	titles := ng.TaskList.GetAllTitles()
 	if len(titles) <= 0 {
 		st := new(styles.OutputStyle)
 
@@ -49,9 +48,13 @@ func getUpdateInfo() (t task.Task) {
 
 	survey.Ask(q1, &choice)
 
-	index, priority := getTaskIndex(choice)
-	tasks := ng.GetTasks()[priority]
-	t = (*tasks)[index]
+	tmp, err := ng.TaskList.GetTaskByTitle(choice)
+	if err != nil {
+		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
+		return
+	}
+
+	t = *tmp
 
 	s := getAllStatuses()
 	var qs = []*survey.Question{
