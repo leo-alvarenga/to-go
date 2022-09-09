@@ -1,8 +1,6 @@
 package styles
 
 import (
-	"fmt"
-
 	"github.com/leo-alvarenga/to-go/shared/cfg"
 )
 
@@ -41,17 +39,12 @@ func generateANSISequence(txt, bg string, style []string) (string, string) {
 	return ansiColors["escape"] + t + b + s + ansiColors["end"], "\033[0m"
 }
 
-func ShowWithStyle(s string, style *OutputStyle) {
-	fmt.Print(style.ANSI + s)
-	fmt.Println(style.Reset)
-}
-
 func ShowAsError(color cfg.ColorScheme, title, msg string) {
 	s1, s2 := new(OutputStyle), new(OutputStyle)
 
 	s1.New(color.Error, "black", []string{"bold", "underline"})
 	s2.New(color.Error, "black", []string{"bold"})
 
-	ShowWithStyle(title, s1)
-	ShowWithStyle(msg, s2)
+	s1.ShowWithStyle(title)
+	s2.ShowWithStyle(msg)
 }

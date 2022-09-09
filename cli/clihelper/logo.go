@@ -13,6 +13,6 @@ var logo = [6]string{
 
 func ShowLogo(style *styles.OutputStyle) {
 	for _, line := range logo {
-		styles.ShowWithStyle(line, style)
+		style.ShowWithStyle(line)
 	}
 }
