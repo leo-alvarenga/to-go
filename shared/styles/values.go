@@ -18,7 +18,7 @@ var ansiColors = map[string]string{
 	"bold":      "1",
 	"italic":    "3",
 	"underline": "4",
-	"strike":    "5",
+	"strike":    "9",
 
 	"escape":    "\033[",
 	"separator": ";",

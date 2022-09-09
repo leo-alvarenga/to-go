@@ -1,6 +1,7 @@
 package ngops
 
 import (
+	"errors"
 	"time"
 
 	"github.com/leo-alvarenga/to-go/ng"
@@ -19,11 +20,22 @@ func Update(t task.Task) error {
 
 	tasks := ng.GetTasks()[t.Priority]
 
-	for i, ts := range *tasks {
-		if ts.Id == t.Id {
-			(*tasks)[i].Status = t.Status
-		}
+	err := updateTask(tasks, t)
+
+	if err != nil {
+		return err
 	}
 
 	return storage.WriteToYamlFile(ng.TaskFilenamesMapped[t.Priority], tasks)
+}
+
+func updateTask(ref *[]task.Task, t task.Task) error {
+	for i, ts := range *ref {
+		if ts.Id == t.Id {
+			(*ref)[i].Status = t.Status
+			return nil
+		}
+	}
+
+	return errors.New("Task not found.")
 }

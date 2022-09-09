@@ -18,7 +18,10 @@ func Edit(n, old task.Task) error {
 		return storage.EditOnSQLite(n)
 	}
 
-	tasks := ng.GetTasks()[old.Priority]
+	return editTask(n, old, ng.GetTasks()[old.Priority])
+}
+
+func editTask(n, old task.Task, tasks *[]task.Task) error {
 	index := -1
 	for i, item := range *tasks {
 		if item.Title == old.Title {

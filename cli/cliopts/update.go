@@ -22,6 +22,20 @@ func getUpdateInfo() (t task.Task) {
 	var choice string
 
 	titles := getAllTitles()
+
+	if len(titles) <= 0 {
+		st := new(styles.OutputStyle)
+
+		st.New("red", "", []string{"bold", "underline"})
+		st.ShowWithStyle("Hold up, cowboy!")
+
+		st.New("red", "", []string{"bold"})
+		st.ShowWithStyle("There are no tasks! Add one first if you want to update one!")
+
+		st = nil
+		return
+	}
+
 	q1 := []*survey.Question{
 		{
 			Name: "Target",
