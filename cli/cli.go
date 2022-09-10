@@ -36,11 +36,6 @@ func Entrypoint(args []string) bool {
 
 	if len(args) > 1 {
 		option := args[1]
-		modifier := ""
-
-		if len(args) > 2 {
-			modifier = args[2]
-		}
 
 		if !clihelper.IsThisAnOption(option) {
 			return cliopts.InvalidOptionAlert(option)
@@ -56,7 +51,10 @@ func Entrypoint(args []string) bool {
 
 		switch option {
 		case clihelper.List:
-			return cliopts.ListOption(modifier)
+			return cliopts.ListOption()
+
+		case clihelper.Describe:
+			return cliopts.DescribeOption()
 
 		case clihelper.Add:
 			return cliopts.AddOption()
@@ -66,6 +64,9 @@ func Entrypoint(args []string) bool {
 
 		case clihelper.Update:
 			return cliopts.UpdateOption()
+
+		case clihelper.Finish:
+			return cliopts.FinishOption()
 
 		case clihelper.Remove:
 			return cliopts.RemoveOption()

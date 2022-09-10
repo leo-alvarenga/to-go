@@ -19,38 +19,12 @@ func EditOption() bool {
 }
 
 func getEditInfo() (n, old task.Task) {
-	var choice string
-
-	titles := getAllTitles()
-	if len(titles) <= 0 {
-		st := new(styles.OutputStyle)
-
-		st.New("red", "", []string{"bold", "underline"})
-		st.ShowWithStyle("Hold up, cowboy!")
-
-		st.New("red", "", []string{"bold"})
-		st.ShowWithStyle("There are no tasks! Add one first if you want to edit them!")
-
-		st = nil
+	old, err := selectTask()
+	if err != nil {
+		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
 		return
 	}
 
-	q1 := []*survey.Question{
-		{
-			Name: "Target",
-			Prompt: &survey.Select{
-				Message: "Select the task you want to edit:",
-				Options: titles,
-				Help:    "The task selected will be the target for any changes you choose to make.",
-			},
-		},
-	}
-
-	survey.Ask(q1, &choice)
-
-	index, priority := getTaskIndex(choice)
-	tasks := ng.GetTasks()[priority]
-	old = (*tasks)[index]
 	n = old
 
 	p, s := getAllPriorities(), getAllStatuses()

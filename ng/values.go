@@ -24,6 +24,4 @@ const fileCount int = len(taskFilenames)
 var ConfigFile string = "to_go.cfg.yaml"
 var Config *cfg.ConfigValue = new(cfg.ConfigValue)
 
-var lowPriorityTasks *[]task.Task
-var mediumPriorityTasks *[]task.Task
-var highPriorityTasks *[]task.Task
+var TaskList *task.TaskList

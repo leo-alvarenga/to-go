@@ -69,7 +69,7 @@ func readFromDB(db *sql.DB, taskSlice *[]task.Task, priority string, done chan b
 	done <- true
 }
 
-func RetriveTasksFromSQLite(h, m, l *[]task.Task) error {
+func RetriveTasksFromSQLite(list *task.TaskList) error {
 	db := ConnectDB()
 
 	if db == nil {
@@ -80,9 +80,9 @@ func RetriveTasksFromSQLite(h, m, l *[]task.Task) error {
 
 	low, med, high := make(chan bool), make(chan bool), make(chan bool)
 
-	go readFromDB(db, h, "high", high)
-	go readFromDB(db, m, "medium", med)
-	go readFromDB(db, l, "low", low)
+	go readFromDB(db, list.High, "high", high)
+	go readFromDB(db, list.Medium, "medium", med)
+	go readFromDB(db, list.Low, "low", low)
 
 	ok := (<-high && <-med && <-low)
 
