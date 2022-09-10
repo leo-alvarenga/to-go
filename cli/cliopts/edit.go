@@ -48,13 +48,12 @@ func getEditInfo() (n, old task.Task) {
 
 	survey.Ask(q1, &choice)
 
-	tmp, err := ng.TaskList.GetTaskByTitle(choice)
+	old, err := ng.TaskList.GetTaskByTitle(choice)
 	if err != nil {
 		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
 		return
 	}
 
-	old = *tmp
 	n = old
 
 	p, s := getAllPriorities(), getAllStatuses()

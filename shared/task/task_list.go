@@ -39,27 +39,48 @@ func (t *TaskList) clearList(priority string) error {
 	return nil
 }
 
-/* Checks whether or not a task 'ts' exists within one of the Task slices */
-func (t *TaskList) doesThisTaskExists(ts Task) bool {
-	for _, item := range *t.High {
-		if item.Title == ts.Title {
-			return true
+/* Returns the task priotity if it exists and its index in the task slice, or an empty string and -1 if it doesn't */
+func (t *TaskList) doesThisTaskExists(title string) (string, int) {
+	for i, item := range *t.High {
+		if item.Title == title {
+			return high, i
 		}
 	}
 
-	for _, item := range *t.Medium {
-		if item.Title == ts.Title {
-			return true
+	for i, item := range *t.Medium {
+		if item.Title == title {
+			return medium, i
 		}
 	}
 
-	for _, item := range *t.Low {
-		if item.Title == ts.Title {
-			return true
+	for i, item := range *t.Low {
+		if item.Title == title {
+			return low, i
 		}
 	}
 
-	return false
+	return "", -1
+}
+
+func (t *TaskList) GetTaskByTitle(title string) (Task, error) {
+	priority, index := t.doesThisTaskExists(title)
+
+	if !IsThisAPriority(priority) {
+		return Task{}, errors.New("Task '" + title + "' not found.")
+	}
+
+	var task Task
+
+	switch priority {
+	case high:
+		task = (*t.High)[index]
+	case medium:
+		task = (*t.Medium)[index]
+	case low:
+		task = (*t.Low)[index]
+	}
+
+	return task, nil
 }
 
 /* Finds the index of the 'ts' Task; Returns an index of -1 and an error if it could not be found  */
@@ -88,85 +109,15 @@ func (t *TaskList) FindIndex(ts Task) (int, error) {
 	return -1, errors.New("Task '" + ts.Title + "' not found.")
 }
 
-/* Finds the index of the Task using only its title as info; Returns an index of -1 and an error if it could not be found  */
-func (t *TaskList) FindIndexByTitle(title string) (int, string, error) {
-	for i, item := range *t.High {
-		if item.Title == title {
-			return i, item.Priority, nil
-		}
-	}
-
-	for i, item := range *t.Medium {
-		if item.Title == title {
-			return i, item.Priority, nil
-		}
-	}
-
-	for i, item := range *t.Low {
-		if item.Title == title {
-			return i, item.Priority, nil
-		}
-	}
-
-	return -1, "", errors.New("Task '" + title + "' not found.")
-}
-
-/*
-Gets the address of a Tasks by searching its index in the corresponding Task slice
-Returns nil and an error if not found
-*/
-func (t *TaskList) GetTaskByIndex(index int, priority string) (*Task, error) {
-	if !IsThisAPriority(priority) {
-		return nil, errors.New("Task does not have a valid priority.")
-	}
-
-	var ref *[]Task
-	switch priority {
-	case high:
-		ref = t.High
-	case medium:
-		ref = t.Medium
-	case low:
-		ref = t.Low
-	}
-
-	if index < len(*ref) && index >= 0 {
-		return &(*ref)[index], nil
-	}
-
-	return nil, errors.New("Task not found.")
-}
-
-/*
-Gets the address of a Tasks by searching its title in the corresponding Task slice
-Returns nil and an error if not found
-*/
-func (t *TaskList) GetTaskByTitle(title string) (*Task, error) {
-	for _, item := range *t.High {
-		if item.Title == title {
-			return &item, nil
-		}
-	}
-
-	for _, item := range *t.Medium {
-		if item.Title == title {
-			return &item, nil
-		}
-	}
-
-	for _, item := range *t.Low {
-		if item.Title == title {
-			return &item, nil
-		}
-	}
-
-	return nil, errors.New("Task '" + title + "' not found.")
-}
-
 /* Adds a 'ts' Task to its corresponding Task slice */
 func (t *TaskList) Add(ts Task) error {
 	if !IsThisAPriority(ts.Priority) {
 		return errors.New("Task does not have a valid priority.")
+	}
+
+	p, _ := t.doesThisTaskExists(ts.Title)
+	if IsThisAPriority(p) {
+		return errors.New("There is already a task with the title '" + ts.Title + "'.")
 	}
 
 	switch ts.Priority {
@@ -185,18 +136,85 @@ func (t *TaskList) Add(ts Task) error {
 }
 
 /* Removes a 'ts' Task from its corresponding Task slice */
-func (t *TaskList) Remove(ts Task) error {
+func (t *TaskList) Remove(title string) error {
+	priority, index := t.doesThisTaskExists(title)
+
+	if !IsThisAPriority(priority) || index < 0 {
+		return errors.New("There are no tasks with the title '" + title + "'.")
+	}
+
+	switch priority {
+	case high:
+		(*t.High)[index] = (*t.High)[len(*t.High)-1]
+		(*t.High) = (*t.High)[:len(*t.High)-1]
+	case medium:
+		(*t.Medium)[index] = (*t.Medium)[len(*t.Medium)-1]
+		(*t.Medium) = (*t.Medium)[:len(*t.Medium)-1]
+	case low:
+		(*t.Low)[index] = (*t.Low)[len(*t.Low)-1]
+		(*t.Low) = (*t.Low)[:len(*t.Low)-1]
+	}
+
 	return nil
 }
 
 /* Edits a task */
 func (t *TaskList) Edit(old, ts Task) error {
+	priority, index := t.doesThisTaskExists(old.Title)
+
+	if !IsThisAPriority(priority) || index < 0 {
+		return errors.New("There are no tasks with the title '" + old.Title + "'.")
+	}
+
+	if old.Priority == ts.Priority {
+		switch priority {
+		case high:
+			(*t.High)[index] = ts
+		case medium:
+			(*t.Medium)[index] = ts
+		case low:
+			(*t.Low)[index] = ts
+		}
+	} else {
+		if old.Title != ts.Title {
+			priority, index = t.doesThisTaskExists(ts.Title)
+			if IsThisAPriority(priority) || index >= 0 {
+				return errors.New("There is already a task with the title '" + ts.Title + "'.")
+			}
+		}
+
+		err := t.Remove(old.Title)
+		if err != nil {
+			return err
+		}
+
+		err = t.Add(ts)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }
 
 /* Updates the status field of a Task */
 func (t *TaskList) Update(ts Task) error {
-	return t.Edit(ts, ts)
+	priority, index := t.doesThisTaskExists(ts.Title)
+
+	if !IsThisAPriority(priority) || index < 0 {
+		return errors.New("There are no tasks with the title '" + ts.Title + "'.")
+	}
+
+	switch priority {
+	case high:
+		(*t.High)[index].Status = ts.Status
+	case medium:
+		(*t.Medium)[index].Status = ts.Status
+	case low:
+		(*t.Low)[index].Status = ts.Status
+	}
+
+	return nil
 }
 
 /* Gets an slice containing all the Task titles currently in use */

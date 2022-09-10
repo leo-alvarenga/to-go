@@ -48,13 +48,11 @@ func getUpdateInfo() (t task.Task) {
 
 	survey.Ask(q1, &choice)
 
-	tmp, err := ng.TaskList.GetTaskByTitle(choice)
+	t, err := ng.TaskList.GetTaskByTitle(choice)
 	if err != nil {
 		styles.ShowAsError(ng.Config.Colors, "Error!", err.Error())
 		return
 	}
-
-	t = *tmp
 
 	s := getAllStatuses()
 	var qs = []*survey.Question{

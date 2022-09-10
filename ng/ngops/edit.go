@@ -17,7 +17,7 @@ func Edit(n, old task.Task) error {
 		return storage.EditOnSQLite(n)
 	}
 
-	_, err := ng.TaskList.Edit(old, n)
+	err := ng.TaskList.Edit(old, n)
 	if err != nil {
 		return nil
 	}

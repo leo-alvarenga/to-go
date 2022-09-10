@@ -1,8 +1,6 @@
 package ngops
 
 import (
-	"fmt"
-
 	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/ng/storage"
 )
@@ -14,17 +12,16 @@ Returns an error if something in the remove proccess went badly or
 if the task does not exists.
 */
 func Remove(title string) error {
-	t, err := ng.TaskList.GetTaskByTitle(title)
-	if err != nil {
-		return err
-	}
-
 	if ng.Config.UseSQLite() {
-		return storage.RemoveFromSQLite(*t)
+		t, err := ng.TaskList.GetTaskByTitle(title)
+		if err != nil {
+			return err
+		}
+
+		return storage.RemoveFromSQLite(t)
 	}
 
-	fmt.Println(*&t.Title)
-	err = ng.TaskList.Remove(*t)
+	err := ng.TaskList.Remove(title)
 	if err != nil {
 		return err
 	}
