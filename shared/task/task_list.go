@@ -24,6 +24,10 @@ func (t *TaskList) New() {
 /* Updates the value meant to be the next task id */
 func (t *TaskList) SyncNextId() {
 	t.nextId = (len(*t.High) + len(*t.Medium) + len(*t.Low)) - 3
+
+	if t.nextId < 0 {
+		t.nextId = 0
+	}
 }
 
 /* Empty one of the slices, based on the 'priority' parameter */
@@ -217,10 +221,13 @@ func (t *TaskList) Update(ts Task) error {
 	switch priority {
 	case high:
 		(*t.High)[index].Status = ts.Status
+		(*t.High)[index].FinishedIn = ts.FinishedIn
 	case medium:
 		(*t.Medium)[index].Status = ts.Status
+		(*t.Medium)[index].FinishedIn = ts.FinishedIn
 	case low:
 		(*t.Low)[index].Status = ts.Status
+		(*t.Low)[index].FinishedIn = ts.FinishedIn
 	}
 
 	return nil
