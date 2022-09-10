@@ -9,14 +9,11 @@ import (
 )
 
 func EditOption() bool {
-	ListOption("")
 	err := ngops.Edit(getEditInfo())
 
 	if err != nil {
 		styles.ShowAsError(ng.Config.Colors, "Unable to edit task", err.Error())
 	}
-
-	ListOption("")
 
 	return false
 }

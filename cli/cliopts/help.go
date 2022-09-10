@@ -1,8 +1,6 @@
 package cliopts
 
 import (
-	"fmt"
-
 	"github.com/leo-alvarenga/to-go/cli/clihelper"
 	"github.com/leo-alvarenga/to-go/ng"
 	"github.com/leo-alvarenga/to-go/shared/styles"
@@ -20,7 +18,7 @@ func HelpMessage() bool {
 }
 
 func InvalidOptionAlert(input string) bool {
-	fmt.Printf("\"%s\" is not a valid option!\n\n", input)
+	styles.ShowAsError(ng.Config.Colors, "\""+input+"\" is not a valid option", "")
 
 	return HelpMessage()
 }

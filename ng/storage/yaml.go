@@ -70,5 +70,7 @@ func RetrieveTasksFromYaml(taskFilenames [3]string, list *task.TaskList) error {
 		)
 	}
 
+	list.SyncNextId()
+
 	return nil
 }

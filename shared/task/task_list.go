@@ -9,6 +9,7 @@ type TaskList struct {
 	Low    *[]Task
 	Medium *[]Task
 	High   *[]Task
+	nextId int
 }
 
 /* Initializes a newly allocated TaskList */
@@ -16,6 +17,13 @@ func (t *TaskList) New() {
 	t.Low = new([]Task)
 	t.Medium = new([]Task)
 	t.High = new([]Task)
+
+	t.nextId = 0
+}
+
+/* Updates the value meant to be the next task id */
+func (t *TaskList) SyncNextId() {
+	t.nextId = (len(*t.High) + len(*t.Medium) + len(*t.Low)) - 3
 }
 
 /* Empty one of the slices, based on the 'priority' parameter */
@@ -84,7 +92,6 @@ func (t *TaskList) GetTaskByTitle(title string) (Task, error) {
 }
 
 /* Finds the index of the 'ts' Task; Returns an index of -1 and an error if it could not be found  */
-// todo -> make so ids aare unique, even in yaml mode
 func (t *TaskList) FindIndex(ts Task) (int, error) {
 	if !IsThisAPriority(ts.Priority) {
 		return -1, errors.New("Task does not have a valid priority.")
@@ -122,15 +129,17 @@ func (t *TaskList) Add(ts Task) error {
 
 	switch ts.Priority {
 	case high:
-		ts.Id = len((*t.High))
+		ts.Id = t.nextId
 		(*t.High) = append((*t.High), ts)
 	case medium:
-		ts.Id = len((*t.Medium))
+		ts.Id = t.nextId
 		(*t.Medium) = append((*t.Medium), ts)
 	case low:
-		ts.Id = len((*t.Low))
+		ts.Id = t.nextId
 		(*t.Low) = append((*t.Low), ts)
 	}
+
+	t.nextId++
 
 	return nil
 }

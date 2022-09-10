@@ -19,7 +19,7 @@ func Edit(n, old task.Task) error {
 
 	err := ng.TaskList.Edit(old, n)
 	if err != nil {
-		return nil
+		return err
 	}
 
 	return writeToYamlWrapper()
