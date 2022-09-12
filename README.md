@@ -9,13 +9,13 @@ Simply download the binary corresponding to your machine, move it to a directory
 
 Robust and easy to use, _To go_ supports the following option:
 
- - `to-go help`: Adds a task based of on the users input
- - `to-go add`: Adds a task based of on the users input"
- - `to-go remove`: Adds a task based of on the users input
- - `to-go edit`: Edits a task chosen by you
- - `to-go update`: Updates the status of a task chosen by you
- - `to-go finish`: Updates the status of a task chosen by you to 'done'
- - `to-go list`: Lists all the tasks, including ther titles, priorities, statuses and dates
+ - `to-go help`: Shows helpful information on the options available
+ - `to-go add`: Adds a task based of on the users input
+ - `to-go remove`: Removes a task selected by the user
+ - `to-go edit`: Edits a task selected by the user
+ - `to-go update`: Updates the status of a task selected by the user
+ - `to-go finish`: Updates the status of a task selected by the user to 'done'
+ - `to-go list`: Lists all the tasks, displaying their titles, priorities, statuses and dates
  - `to-go describe`: Displays all the info pertaining to a task chosen by you
 
 # Customization

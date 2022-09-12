@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To go</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script defer src="./landing.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col" style="text-align: center;">
+                <h1>To go</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div id="tasks" class="col">
+
+            </div>
+            <div class="col"></div>
+        </div>
+    </div>
+
+    <template class="task">
+        <div class="task-wrapper">
+            <h5 class="task-priority"></h5>
+            <div class="task-body">
+              <h5 class="task-title"></h5>
+              <p class="task-description"></p>
+              <button class="btn btn-primary">Go somewhere</button>
+            </div>
+        </div>
+    </template>
+</body>
+</html>
