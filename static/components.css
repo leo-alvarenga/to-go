@@ -1,0 +1,88 @@
+.task-header {
+    display: flex;
+    flex-direction: row;
+
+    align-items: center;
+}
+
+.task-title {
+    overflow: hidden;
+}
+
+.task:hover .task-body {
+    display: block;
+}
+
+.task-badges {
+    margin-left: auto;
+
+    list-style: none;
+    display: flex;
+    padding: 0;
+
+    flex-direction: row;
+    gap: 1rem;
+
+}
+
+.task-badges li {
+    padding: 5px;
+    width: 65px;
+    height: fit-content;
+
+    text-align: center;
+
+    border-radius: 8px;
+    border: solid 1px var(--text-color);
+}
+
+.task-priority-low {
+    background-color: var(--low-p-color);
+}
+
+.task-priority-medium {
+    background-color: var(--medium-p-color);
+}
+
+.task-priority-high {
+    background-color: var(--high-p-color);
+}
+
+.task-status-pending {
+    background-color: var(--medium-p-color);
+}
+
+.task-status-doing {
+    background-color: var(--status-doing-color);
+}
+
+.task-status-done {
+    background-color: var(--low-p-color);
+}
+
+.task-action-wrapper {
+    display: flex;
+    flex-direction: row;
+
+    gap: 1rem;
+}
+
+button {
+    background-color: var(--background-color);
+
+    color: var(--text-color);
+
+    padding: 5px 10px;
+
+    border-radius: 8px;
+    border: none;
+
+    transition: all 0.5s ease;
+}
+
+button:hover {
+    cursor: pointer;
+
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    transform: scale(0.95);
+}

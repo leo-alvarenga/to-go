@@ -20,8 +20,7 @@ func ConnectDB() *sql.DB {
 		return nil
 	}
 
-	err = db.Ping()
-
+	db.Ping()
 	return db
 }
 

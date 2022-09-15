@@ -23,8 +23,6 @@ func readFromYamlFile(filename string, taskSlice *[]task.Task, done chan bool) {
 			done <- false
 			return
 		}
-
-		tasks = nil
 	} else {
 		file, _ := os.OpenFile(filename, os.O_CREATE, 0644)
 
