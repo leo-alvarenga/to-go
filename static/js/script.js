@@ -1,8 +1,3 @@
-var host = "127.0.0.1" + window.location.host.split(":")[1]
-const init  = {
-    method: "GET",
-    credentials: "same-origin",
-}
 
 var tasks = [
     {
@@ -88,17 +83,40 @@ var tasks = [
     }
 ];
 
-function removeTask(title) {
-    var init = {
-        method: 'DELETE',
-    };
+function updateTask(task) {
+    var status = 'pending';
 
-    fetch("/api/remove?title=" + title, init)
+    if (task.Status) {
+        switch (task.Status) {
+            case 'doing':
+                status = 'done';
+                break;
+            case 'done':
+                status = 'pending';
+                break;
+            default:
+                status = 'doing';
+                break;
+        }
+    }
+    
+    task.Status = status;
+    fetch('/api/update', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        body: JSON.stringify({ Status: status, ...task }),
+    })
         .then(res => {
-            console.log(res.status)
-            location.reload()
+            if (res.status !== 200)
+                throw new Error(res.statusText);
+
+            window.alert(`Task '${task.Title}' updated to '${task.Status}'`);
+            location.reload();
         })
-        .catch(err => console.error(err));
+        .catch(err => window.alert("Could not update:\n" + err));
 }
 
 function generateHTMLForTask(task) {
@@ -132,19 +150,10 @@ function generateHTMLForTask(task) {
     badges.appendChild(temp);
     
     temp = document.createElement('li');
-    if (task.Status && task.Status === "pending") {
-        temp.innerText = task.Status || "pending";
-        temp.className = "task-status-pending";
-    } else {
-        var check = document.createElement('input');
+    temp.innerText = task.Status || "pending";
+    temp.className = "task-status-" + temp.innerText;
 
-        check.type = "checkbox"
-        check.className = "task-check";
-        check.checked = task.Status === "done";
-        check.onchange = (event) => console.log(event.target.value);
-
-        temp.appendChild(check);
-    }
+    temp.onclick = () => updateTask(task);
 
     badges.appendChild(temp);
 
@@ -206,8 +215,21 @@ function renderTasks(tasks) {
     }
 }
 
+function removeTask(title) {
+    var init = {
+        method: 'DELETE',
+    };
+
+    fetch("/api/remove?title=" + title, init)
+        .then(res => {
+            console.log(res.status)
+            location.reload()
+        })
+        .catch(err => console.error(err));
+}
+
 function getTasks() {
-    fetch("/api/get", init)
+    fetch("/api/get")
         .then(res => res.json())
         .then(json => {
             if (json.content && json.content.length > 0) {
