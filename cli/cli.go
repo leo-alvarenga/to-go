@@ -50,14 +50,11 @@ func Entrypoint(args []string) bool {
 		}
 
 		switch option {
-		case clihelper.List:
-			return cliopts.ListOption()
-
-		case clihelper.Describe:
-			return cliopts.DescribeOption()
-
 		case clihelper.Add:
 			return cliopts.AddOption()
+
+		case clihelper.Remove:
+			return cliopts.RemoveOption()
 
 		case clihelper.Edit:
 			return cliopts.EditOption()
@@ -68,8 +65,14 @@ func Entrypoint(args []string) bool {
 		case clihelper.Finish:
 			return cliopts.FinishOption()
 
-		case clihelper.Remove:
-			return cliopts.RemoveOption()
+		case clihelper.List:
+			return cliopts.ListOption()
+
+		case clihelper.Describe:
+			return cliopts.DescribeOption()
+
+		case clihelper.Dashboard:
+			return cliopts.DashboardOption()
 
 		default:
 			break

@@ -11,6 +11,8 @@ import (
 func Update(t task.Task) error {
 	if t.Status == task.Statuses["done"] {
 		t.FinishedIn = getDateInToGosFmt(time.Now().Date())
+	} else {
+		t.FinishedIn = ""
 	}
 
 	ng.TaskList.Update(t)

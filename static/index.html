@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To go - A lightweight to-do tracker</title>
+
+    <link href="./styles/task.css" rel="stylesheet">
+    <link href="./styles/components.css" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+        <div id="list-container" class="container">
+            <ul id="task-list">
+                <li id="add-task">
+                    <h1>New Task (+)</h1>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+
+    <div class="modal-edit">
+        <div class="modal-content">
+            <div class="modal-input">
+                <h2>Title</h2>
+
+                <input id="modal-input-title" class="modal-input-text" type="text">
+            </div>
+            <div class="modal-input">
+                <h2>Description</h2>
+
+                <textarea id="modal-input-desc" class="modal-input-text" type="text"></textarea>
+            </div>
+            <ul id="modal-priority" class="modal-input">
+                <h2>Priority</h2>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="low">
+                    <label for="low">Low</label>
+                </li>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="medium">
+                    <label for="medium">Medium</label>
+                </li>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="high">
+                    <label for="high">High</label>
+                </li>
+            </ul>
+
+            <div id="modal-footer">
+                <button id="modal-submit"></button>
+            </div>
+        </div>  
+    </div>
+
+    <script src="./js/script.js"></script>
+</body>
+</html>

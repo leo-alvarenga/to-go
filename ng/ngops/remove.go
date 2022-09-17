@@ -8,7 +8,7 @@ import (
 /*
 Removes a task from the persistent volume chose by the user.
 
-Returns an error if something in the remove proccess went badly or
+Returns an error if something in the remove process went badly or
 if the task does not exists.
 */
 func Remove(title string) error {
