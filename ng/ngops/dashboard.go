@@ -87,8 +87,8 @@ func addTaskHandler(w http.ResponseWriter, req *http.Request) {
 
 	err = Add(*t)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(`{"status":"` + err.Error() + `"}`))
+		w.WriteHeader(http.StatusForbidden)
+		w.Write([]byte(`{"status":"Couldn't save changes because there's another task with this title. ` + err.Error() + `"}`))
 		return
 	}
 

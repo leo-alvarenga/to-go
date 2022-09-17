@@ -20,6 +20,44 @@
         </div>
     </div>
 
+
+    <div class="modal-edit">
+        <div class="modal-content">
+            <div class="modal-input">
+                <h2>Title</h2>
+
+                <input id="modal-input-title" class="modal-input-text" type="text">
+            </div>
+            <div class="modal-input">
+                <h2>Description</h2>
+
+                <textarea id="modal-input-desc" class="modal-input-text" type="text"></textarea>
+            </div>
+            <ul id="modal-priority" class="modal-input">
+                <h2>Priority</h2>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="low">
+                    <label for="low">Low</label>
+                </li>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="medium">
+                    <label for="medium">Medium</label>
+                </li>
+                
+                <li>
+                    <input type="radio" name="task-priority" value="high">
+                    <label for="high">High</label>
+                </li>
+            </ul>
+
+            <div id="modal-footer">
+                <button id="modal-submit"></button>
+            </div>
+        </div>  
+    </div>
+
     <script src="./js/script.js"></script>
 </body>
 </html>

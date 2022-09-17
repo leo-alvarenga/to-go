@@ -93,6 +93,8 @@ func (cfg *ConfigValue) LoadFromYaml(filename string) error {
 		cfg.New()
 	}
 
+	cfg.Colors.Reset = colorReset
+
 	return nil
 }
 
