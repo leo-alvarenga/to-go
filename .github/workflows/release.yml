@@ -32,3 +32,9 @@ jobs:
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GO_RELEASER_GITHUB_TOKEN }}
+
+      - name: Copy static files
+        uses: actions/upload-artifact@v3
+        with:
+          name: DashboardUI
+          path: static/*

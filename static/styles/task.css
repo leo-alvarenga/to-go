@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300&display=swap');
+
+:root {
+    --background-color: #2C3639;
+    --task-background-color: #3F4E4F;
+    --text-color: #DCD7C9;
+    --accent-color: #A27B5C;
+
+    --low-p-color: rgba(0, 250, 0, 0.2);
+    --medium-p-color: rgba(147, 184, 0, 0.2);
+    --high-p-color: rgba(250, 0, 0, 0.2);
+
+    --status-doing-color: rgba(0, 0, 250, 0.2);
+    --border-radius: 8px;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-family: Poppins;
+}
+
+.wrapper {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+
+    justify-content: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+    align-content: center;
+    padding: 0;
+}
+
+#list-container {
+    width: 60%;
+}
+
+#task-list {
+    width: 100%;
+
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    padding: 0;
+}
+
+.task, #add-task {
+    width: 80%;
+    
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    
+    cursor: pointer;
+
+    border-radius: var(--border-radius);
+    border: solid 1px var(--text-color);
+    background-color: var(--task-background-color);
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+
+    transition: all 0.5s ease;
+}
+
+#add-task {
+    text-align: center;
+}
+
+
+
+.task:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    transform: scale(1.02);
+}
+
+#add-task:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    transform: scale(0.98);
+}
+
+.task-body {
+    display: none;
+    transition: all 0.5s ease;
+
+    border-top: solid 1px var(--text-color);
+}

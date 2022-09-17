@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-/* A container that holds all the tasks in dynamicaly allocated slices */
+/* A container that holds all the tasks in dynamically allocated slices */
 type TaskList struct {
 	Low    *[]Task
 	Medium *[]Task
